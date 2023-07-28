@@ -8,6 +8,7 @@ C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\bin\Debug\com.company
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\MonoAndroid,Version=v12.0.AssemblyAttributes.cs
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\build.props
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\adb.props
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\Score.csproj.AssemblyReference.cache
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\stamp\_BuildLibraryImportsCache.stamp
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res.flag
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\lp\38\jl\files.cache
@@ -57,6 +58,7 @@ C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\mip
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\mipmap-anydpi-v26\ic_launcher.xml
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\mipmap-anydpi-v26\ic_launcher_round.xml
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\stopwatch_layout.xml
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\toolbar_layout.xml
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\uploadflags.txt
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\resolvedassemblies.hash
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\assets\Java.Interop.dll
@@ -306,4 +308,3 @@ C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\stamp\_
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\stamp\_GenerateJavaStubs.stamp
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\stamp\_ResolveLibraryProjectImports.stamp
-C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\Score.csproj.AssemblyReference.cache
