@@ -12,16 +12,9 @@ using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 
 namespace Score
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    [Activity(Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity, View.IOnTouchListener
     {
-        //Stopwatch
-        private TextView timeTextView;
-        private Button startButton;
-        private Button pauseButton;
-        private Button resetButton;
-        private StopwatchManager stopwatchManager;
-
         //ScoreData
         private ScoreDataManager scoreDataManager;
         private List<ScoreDataManager> scoreList = new List<ScoreDataManager>();
@@ -44,35 +37,6 @@ namespace Score
             touchView.SetOnTouchListener(this);
 
             scoreDataManager = new ScoreDataManager();
-
-
-            //// Get references to UI elements
-            //timeTextView = FindViewById<TextView>(Resource.Id.timeTextView);
-            //startButton = FindViewById<Button>(Resource.Id.startButton);
-            //pauseButton = FindViewById<Button>(Resource.Id.pauseButton);
-            //resetButton = FindViewById<Button>(Resource.Id.resetButton);
-
-            //// Initialize the StopwatchManager
-            //stopwatchManager = new StopwatchManager();
-
-            //// Attach click event handlers to buttons
-            //startButton.Click += (sender, e) =>
-            //{
-            //    stopwatchManager.Start();
-            //    UpdateTime();
-            //};
-
-            //pauseButton.Click += (sender, e) =>
-            //{
-            //    stopwatchManager.Pause();
-            //    UpdateTime();
-            //};
-
-            //resetButton.Click += (sender, e) =>
-            //{
-            //    stopwatchManager.Reset();
-            //    UpdateTime();
-            //};
 
             //textViewScoreThuis = FindViewById<TextView>(Resource.Id.ScoreThuis);
             //textViewScoreUit = FindViewById<TextView>(Resource.Id.ScoreUit);
@@ -113,7 +77,7 @@ namespace Score
                         scoreData.DoelpuntVoorTegen == "Voor" ? scoreDataManager.CheckPlaatsDoelpunt(x, y, screenHeight, screenWidth) :
                         scoreDataManager.CheckPlaatsTegenDoelpunt(x, y, screenHeight, screenWidth);
 
-                    //ShowPopup(scoreData);
+                    ShowPopup(scoreData);
 
                     break;
                 case MotionEventActions.Move:
@@ -128,54 +92,21 @@ namespace Score
             return true;
         }
 
-        //private void ShowPopup(ScoreDataManager scoreData)
-        //{
-        //    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //    builder.SetTitle("Score Information");
-        //    builder.SetMessage($"DoelpuntVoorTegen: {scoreData.DoelpuntVoorTegen}\nPlaatsDoelpunt: {scoreData.PlaatsDoelpunt}");
-
-        //    // Create an array of the options
-        //    string[] options = { "Doorloopbal", "Afstandschot", "Strafworp" };
-
-        //    // Inflate a layout containing a Spinner
-        //    View view = LayoutInflater.Inflate(Resource.Layout.popup_layout, null);
-        //    Spinner spinner = view.FindViewById<Spinner>(Resource.Id.spinner);
-
-        //    // Create an ArrayAdapter using the options array and a default spinner layout
-        //    ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, options);
-        //    adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-        //    spinner.Adapter = adapter;
-
-        //    builder.SetView(view);
-
-        //    builder.SetPositiveButton("OK", (s, e) =>
-        //    {
-        //        string selectedOption = spinner.SelectedItem.ToString();
-
-        //        // TODO: Use the selectedOption as needed
-
-        //        // Show a toast with the selected option
-        //        Toast.MakeText(this, $"Selected option: {selectedOption}", ToastLength.Short).Show();
-        //    });
-
-        //    AlertDialog dialog = builder.Create();
-        //    dialog.Show();
-        //}
-
-
-        private async void UpdateTime()
+        private void ShowPopup(ScoreDataManager scoreData)
         {
-            while (true)
-            {
-                // Update the UI with the current elapsed time
-                RunOnUiThread(() =>
-                {
-                    timeTextView.Text = stopwatchManager.ElapsedTime.ToString(@"mm\:ss");
-                });
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.SetTitle("Score Information");
+            dialogBuilder.SetMessage($"Doelpunt voor of tegen: {scoreData.DoelpuntVoorTegen}\nPlaats doelpunt: {scoreData.PlaatsDoelpunt}");
 
-                // Delay for 10 milliseconds before updating the time again
-                await Task.Delay(10);
-            }
+            // Add a button to dismiss the dialog
+            dialogBuilder.SetPositiveButton("OK", (sender, args) =>
+            {
+                // Handle button click event here if needed
+            });
+
+            // Create and show the dialog
+            AlertDialog dialog = dialogBuilder.Create();
+            dialog.Show();
         }
 
         private void ThuisPlus(object sender, EventArgs e)
@@ -189,6 +120,7 @@ namespace Score
             scoreUit++;
             textViewScoreUit.Text = scoreUit.ToString();
         }
+
         private void ThuisMin(object sender, EventArgs e)
         {
             if (scoreThuis <= 0) { scoreThuis = 0; } else { scoreThuis--; }
