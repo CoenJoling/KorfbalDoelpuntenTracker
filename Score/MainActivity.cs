@@ -113,7 +113,7 @@ namespace Score
                         scoreData.DoelpuntVoorTegen == "Voor" ? scoreDataManager.CheckPlaatsDoelpunt(x, y, screenHeight, screenWidth) :
                         scoreDataManager.CheckPlaatsTegenDoelpunt(x, y, screenHeight, screenWidth);
 
-                    ShowPopup(scoreData);
+                    //ShowPopup(scoreData);
 
                     break;
                 case MotionEventActions.Move:
@@ -128,39 +128,39 @@ namespace Score
             return true;
         }
 
-        private void ShowPopup(ScoreDataManager scoreData)
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.SetTitle("Score Information");
-            builder.SetMessage($"DoelpuntVoorTegen: {scoreData.DoelpuntVoorTegen}\nPlaatsDoelpunt: {scoreData.PlaatsDoelpunt}");
+        //private void ShowPopup(ScoreDataManager scoreData)
+        //{
+        //    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //    builder.SetTitle("Score Information");
+        //    builder.SetMessage($"DoelpuntVoorTegen: {scoreData.DoelpuntVoorTegen}\nPlaatsDoelpunt: {scoreData.PlaatsDoelpunt}");
 
-            // Create an array of the options
-            string[] options = { "Doorloopbal", "Afstandschot", "Strafworp" };
+        //    // Create an array of the options
+        //    string[] options = { "Doorloopbal", "Afstandschot", "Strafworp" };
 
-            // Inflate a layout containing a Spinner
-            View view = LayoutInflater.Inflate(Resource.Layout.popup_layout, null);
-            Spinner spinner = view.FindViewById<Spinner>(Resource.Id.spinner);
+        //    // Inflate a layout containing a Spinner
+        //    View view = LayoutInflater.Inflate(Resource.Layout.popup_layout, null);
+        //    Spinner spinner = view.FindViewById<Spinner>(Resource.Id.spinner);
 
-            // Create an ArrayAdapter using the options array and a default spinner layout
-            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, options);
-            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spinner.Adapter = adapter;
+        //    // Create an ArrayAdapter using the options array and a default spinner layout
+        //    ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, options);
+        //    adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+        //    spinner.Adapter = adapter;
 
-            builder.SetView(view);
+        //    builder.SetView(view);
 
-            builder.SetPositiveButton("OK", (s, e) =>
-            {
-                string selectedOption = spinner.SelectedItem.ToString();
+        //    builder.SetPositiveButton("OK", (s, e) =>
+        //    {
+        //        string selectedOption = spinner.SelectedItem.ToString();
 
-                // TODO: Use the selectedOption as needed
+        //        // TODO: Use the selectedOption as needed
 
-                // Show a toast with the selected option
-                Toast.MakeText(this, $"Selected option: {selectedOption}", ToastLength.Short).Show();
-            });
+        //        // Show a toast with the selected option
+        //        Toast.MakeText(this, $"Selected option: {selectedOption}", ToastLength.Short).Show();
+        //    });
 
-            AlertDialog dialog = builder.Create();
-            dialog.Show();
-        }
+        //    AlertDialog dialog = builder.Create();
+        //    dialog.Show();
+        //}
 
 
         private async void UpdateTime()

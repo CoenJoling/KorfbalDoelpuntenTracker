@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\coenj\\Source\\Repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj": {}
+    "C:\\Users\\coenj\\source\\repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj": {}
   },
   "projects": {
-    "C:\\Users\\coenj\\Source\\Repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj": {
+    "C:\\Users\\coenj\\source\\repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\coenj\\Source\\Repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj",
+        "projectUniqueName": "C:\\Users\\coenj\\source\\repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj",
         "projectName": "Score",
-        "projectPath": "C:\\Users\\coenj\\Source\\Repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj",
+        "projectPath": "C:\\Users\\coenj\\source\\repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj",
         "packagesPath": "C:\\Users\\coenj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\coenj\\Source\\Repos\\KorfbalDoelpuntenTracker\\Score\\obj\\",
+        "outputPath": "C:\\Users\\coenj\\source\\repos\\KorfbalDoelpuntenTracker\\Score\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [

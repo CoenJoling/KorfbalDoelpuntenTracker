@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4ghrqFL8oX02hE+PBubdbxdDLcq0Xp8bF6owKDz9ENyTTjFfWZWcsf8N0RIhdbi4Vv5UgUCskvTpG4wgfJaVXQ==",
+  "dgSpecHash": "qbMsDY2AvqiMjlLgJKh4EASPlUL+o6wzXoXhobh6Lp7qYuuvrw9yp78EFf99/NtQZ8aUSCsOvg03c6B2MoialQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\coenj\\Source\\Repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj",
+  "projectFilePath": "C:\\Users\\coenj\\source\\repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\coenj\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\coenj\\.nuget\\packages\\xamarin.androidx.activity\\1.1.0.3\\xamarin.androidx.activity.1.1.0.3.nupkg.sha512",
