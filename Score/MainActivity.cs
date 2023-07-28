@@ -32,6 +32,7 @@ namespace Score
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
             RequestedOrientation = ScreenOrientation.Landscape;
+            //StartActivity(typeof(StopwatchActivity));
 
             var touchView = FindViewById<View>(Resource.Id.touchView);
             touchView.SetOnTouchListener(this);
