@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "qbMsDY2AvqiMjlLgJKh4EASPlUL+o6wzXoXhobh6Lp7qYuuvrw9yp78EFf99/NtQZ8aUSCsOvg03c6B2MoialQ==",
+  "dgSpecHash": "HRGmHGQZmzbYsuUOgOap6RoCcGnjR0v+YMn3nJmK2L7c/uNzCUYYF6RtO5AWk42+dx3HCrKezLtOuZ7CtWJQRQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\coenj\\source\\repos\\KorfbalDoelpuntenTracker\\Score\\Score.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\coenj\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
+    "C:\\Users\\coenj\\.nuget\\packages\\microsoft.csharp\\4.3.0\\microsoft.csharp.4.3.0.nupkg.sha512",
     "C:\\Users\\coenj\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\coenj\\.nuget\\packages\\xamarin.androidx.activity\\1.1.0.3\\xamarin.androidx.activity.1.1.0.3.nupkg.sha512",
     "C:\\Users\\coenj\\.nuget\\packages\\xamarin.androidx.annotation\\1.1.0.7\\xamarin.androidx.annotation.1.1.0.7.nupkg.sha512",

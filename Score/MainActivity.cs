@@ -5,8 +5,11 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidX.AppCompat.App;
+using CsvHelper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 
@@ -19,8 +22,16 @@ namespace Score
         private ScoreDataManager scoreDataManager;
         private List<ScoreDataManager> scoreList = new List<ScoreDataManager>();
 
+        //Speel klaar button
+        private Button eindeSpel;
+
+        private TextView timeTextView;
+        private Button startButton;
+        private Button pauseButton;
+        private Button resetButton;
+        private StopwatchManager stopwatchManager;
+
         //Score
-        private Button button;
         private TextView textViewScoreThuis;
         private TextView textViewScoreUit;
         private int scoreThuis;
@@ -32,27 +43,99 @@ namespace Score
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
             RequestedOrientation = ScreenOrientation.Landscape;
-            //StartActivity(typeof(StopwatchActivity));
 
             var touchView = FindViewById<View>(Resource.Id.touchView);
             touchView.SetOnTouchListener(this);
 
             scoreDataManager = new ScoreDataManager();
 
-            //textViewScoreThuis = FindViewById<TextView>(Resource.Id.ScoreThuis);
-            //textViewScoreUit = FindViewById<TextView>(Resource.Id.ScoreUit);
+            eindeSpel = FindViewById<Button>(Resource.Id.eindeSpel);
+            this.FindViewById<Button>(Resource.Id.eindeSpel).Click += this.EindeWedstrijd;
 
-            //button = FindViewById<Button>(Resource.Id.ThuisPlus);
-            //this.FindViewById<Button>(Resource.Id.ThuisPlus).Click += this.ThuisPlus;
+            stopwatchManager = new StopwatchManager();
 
-            //button = FindViewById<Button>(Resource.Id.UitPlus);
-            //this.FindViewById<Button>(Resource.Id.UitPlus).Click += this.UitPlus;
+            ////Stopwatch dingen
+            timeTextView = FindViewById<TextView>(Resource.Id.timeTextView);
+            startButton = FindViewById<Button>(Resource.Id.startButton);
+            pauseButton = FindViewById<Button>(Resource.Id.pauseButton);
+            resetButton = FindViewById<Button>(Resource.Id.resetButton);
+            
+            textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
+            textViewScoreUit = FindViewById<TextView>(Resource.Id.textViewScoreUit);
 
-            //button = FindViewById<Button>(Resource.Id.ThuisMin);
-            //this.FindViewById<Button>(Resource.Id.ThuisMin).Click += this.ThuisMin;
+            // Initialize the StopwatchManager
+            stopwatchManager = new StopwatchManager();
 
-            //button = FindViewById<Button>(Resource.Id.UitMin);
-            //this.FindViewById<Button>(Resource.Id.UitMin).Click += this.UitMin;
+            // Attach click event handlers to buttons
+            startButton.Click += (sender, e) =>
+            {
+                stopwatchManager.Start();
+                UpdateTime();
+            };
+
+            pauseButton.Click += (sender, e) =>
+            {
+                stopwatchManager.Pause();
+                UpdateTime();
+            };
+
+            resetButton.Click += (sender, e) =>
+            {
+                stopwatchManager.Reset();
+                UpdateTime();
+            };
+        }
+
+        private async void UpdateTime()
+        {
+            while (true)
+            {
+                // Update the UI with the current elapsed time
+                RunOnUiThread(() =>
+                {
+                    timeTextView.Text = stopwatchManager.ElapsedTime.ToString(@"mm\:ss");
+                });
+
+                // Delay for 10 milliseconds before updating the time again
+                await Task.Delay(10);
+            }
+        }
+
+        private void EindeWedstrijd(object sender, EventArgs e)
+        {
+            var dateTimeNow = DateTime.Now.ToString("ddMMyyyy");
+            var random = new Random();
+            var num = random.Next(1000).ToString();
+
+            string path = System.IO.Path.Combine(FilesDir.AbsolutePath, "Download");
+            string fileName = dateTimeNow + num + ".txt";
+            string filePath = System.IO.Path.Combine(path, fileName);
+
+            // Ensure the directory exists
+            System.IO.Directory.CreateDirectory(path);
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                // Write content to the file
+                writer.WriteLine("This is the first line of the text file.");
+                writer.WriteLine("This is the second line of the text file.");
+                writer.WriteLine("And this is the third line.");
+            }
+
+            //var path = Android.OS.Environment.DirectoryDownloads;
+            //var filePath = Path.Combine(path, dateTimeNow + "_" + num + ".csv");
+
+            //using var fs = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write);
+            //using (var writer = new StreamWriter(fs))
+            //using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            //{
+            //    csv.WriteRecords(scoreList);
+            //}
+            scoreList.Clear(); 
+            scoreThuis = 0;
+            textViewScoreThuis.Text = scoreThuis.ToString();
+            scoreUit = 0;
+            textViewScoreUit.Text = scoreUit.ToString();
         }
 
         public bool OnTouch(View v, MotionEvent e)
@@ -77,17 +160,10 @@ namespace Score
                     scoreData.PlaatsDoelpunt =
                         scoreData.DoelpuntVoorTegen == "Voor" ? scoreDataManager.CheckPlaatsDoelpunt(x, y, screenHeight, screenWidth) :
                         scoreDataManager.CheckPlaatsTegenDoelpunt(x, y, screenHeight, screenWidth);
+                    scoreData.Tijd = timeTextView.Text;
 
                     ShowPopup(scoreData);
 
-                    break;
-                case MotionEventActions.Move:
-                    // Touch moved  
-                    // Handle the touch move event
-                    break;
-                case MotionEventActions.Up:
-                    // Touch ended
-                    // Handle the touch up event
                     break;
             }
             return true;
@@ -97,10 +173,37 @@ namespace Score
         {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.SetTitle("Score Information");
-            dialogBuilder.SetMessage($"Doelpunt voor of tegen: {scoreData.DoelpuntVoorTegen}\nPlaats doelpunt: {scoreData.PlaatsDoelpunt}");
+            dialogBuilder.SetMessage($"Doelpunt" +
+                $": {scoreData.DoelpuntVoorTegen}\nTijd doelpunt: {scoreData.Tijd}\nPlaats doelpunt: {scoreData.PlaatsDoelpunt}\nManier van scoren:");
+
+            View dialogView = LayoutInflater.Inflate(Resource.Layout.spinner_layout, null);
+            dialogBuilder.SetView(dialogView);
+
+            Spinner spinner = dialogView.FindViewById<Spinner>(Resource.Id.spinner1);
+            
+            var spinnerData = new List<string> { "Doorloopbal", "Afstandsschot", "Strafworp", "VrijeWorp", "KortSchot" };
+            var spinnerAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData);
+            spinner.Adapter = spinnerAdapter;
+
+            string selectedSpinnerItem = null; // Define a variable to store the selection
+
+            spinner.ItemSelected += (sender, e) =>
+            {
+                selectedSpinnerItem = spinnerData[e.Position]; // Store the selected item
+            };
 
             // Add a button to dismiss the dialog
             dialogBuilder.SetPositiveButton("OK", (sender, args) =>
+            {
+                if (scoreData.DoelpuntVoorTegen == "Voor") ThuisPlus();
+                if (scoreData.DoelpuntVoorTegen == "Tegen") UitPlus();
+
+                scoreData.scoreMethode = selectedSpinnerItem;
+
+                scoreList.Add(scoreData);
+            });     
+            // Add a button to dismiss the dialog
+            dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
             {
                 // Handle button click event here if needed
             });
@@ -110,27 +213,15 @@ namespace Score
             dialog.Show();
         }
 
-        private void ThuisPlus(object sender, EventArgs e)
+        private void ThuisPlus()
         {
             scoreThuis++;
             textViewScoreThuis.Text = scoreThuis.ToString();
         }
 
-        private void UitPlus(object sender, EventArgs e)
+        private void UitPlus()
         {
             scoreUit++;
-            textViewScoreUit.Text = scoreUit.ToString();
-        }
-
-        private void ThuisMin(object sender, EventArgs e)
-        {
-            if (scoreThuis <= 0) { scoreThuis = 0; } else { scoreThuis--; }
-            textViewScoreThuis.Text = scoreThuis.ToString();
-        }
-
-        private void UitMin(object sender, EventArgs e)
-        {
-            if (scoreUit <= 0) { scoreUit = 0; } else { scoreUit--; }
             textViewScoreUit.Text = scoreUit.ToString();
         }
     }

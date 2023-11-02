@@ -3,21 +3,12 @@
     public class ScoreDataManager
     {
         public string DoelpuntVoorTegen { set; get; }
-        //public string tijd { set; get; }
+        public string Tijd { set; get; }
         public string PlaatsDoelpunt { set; get; }
-        public ScoreMethode scoreMethode { set; get; }
+        public string scoreMethode { set; get; }
 
         public ScoreDataManager()
         {
-        }
-
-        public enum ScoreMethode
-        {
-            Doorloopbal,
-            Afstandsschot,
-            Strafworp,
-            VrijeWorp,
-            KortSchot
         }
 
         public string CheckDoelpuntVoorOfTegen(float x, int screenWidth)

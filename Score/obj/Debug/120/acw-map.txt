@@ -1,6 +1,3 @@
-Score.StopwatchActivity, Score;crc64a8256fd62bfbb94c.StopwatchActivity
-Score.StopwatchActivity;crc64a8256fd62bfbb94c.StopwatchActivity
-score.StopwatchActivity;crc64a8256fd62bfbb94c.StopwatchActivity
 Score.MainActivity, Score;crc64a8256fd62bfbb94c.MainActivity
 Score.MainActivity;crc64a8256fd62bfbb94c.MainActivity
 score.MainActivity;crc64a8256fd62bfbb94c.MainActivity

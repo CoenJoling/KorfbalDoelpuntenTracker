@@ -1,2 +1,2 @@
-AdbTarget=-s emulator-5554
+AdbTarget=-s RFCT310G1AZ
 AdbOptions=
