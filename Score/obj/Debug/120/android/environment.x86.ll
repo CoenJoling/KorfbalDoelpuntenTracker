@@ -81,7 +81,7 @@ target triple = "i686-unknown-linux-android"
 @__app_environment_variables_n_1.2 = internal constant [15 x i8] c"MONO_LOG_LEVEL\00", align 1
 @__app_environment_variables_v_1.3 = internal constant [5 x i8] c"info\00", align 1
 @__app_environment_variables_n_2.4 = internal constant [17 x i8] c"XAMARIN_BUILD_ID\00", align 1
-@__app_environment_variables_v_2.5 = internal constant [37 x i8] c"edf7773d-5d0a-4b18-865f-2437f63909a9\00", align 1
+@__app_environment_variables_v_2.5 = internal constant [37 x i8] c"fcc5eff7-61fd-49c6-bcb3-9b5dbdd5686b\00", align 1
 @__app_environment_variables_n_3.6 = internal constant [28 x i8] c"XA_HTTP_CLIENT_HANDLER_TYPE\00", align 1
 @__app_environment_variables_v_3.7 = internal constant [41 x i8] c"Xamarin.Android.Net.AndroidClientHandler\00", align 1
 @__app_environment_variables_n_4.8 = internal constant [16 x i8] c"XA_TLS_PROVIDER\00", align 1
@@ -106,7 +106,7 @@ target triple = "i686-unknown-linux-android"
 
 ; app_system_properties
 @app_system_properties = local_unnamed_addr constant [0 x i8*] zeroinitializer, align 4
-@__ApplicationConfig_android_package_name.0 = internal constant [22 x i8] c"com.companyname.score\00", align 1
+@__ApplicationConfig_android_package_name.0 = internal constant [13 x i8] c"Tracker_1.x0\00", align 1
 
 ; application_config
 @application_config = local_unnamed_addr constant %struct.ApplicationConfig {
@@ -135,7 +135,7 @@ target triple = "i686-unknown-linux-android"
 	i32 0, ; jni_remapping_replacement_type_count
 	i32 0, ; jni_remapping_replacement_method_index_entry_count
 	i32 0, ; mono_components_mask
-	i8* getelementptr inbounds ([22 x i8], [22 x i8]* @__ApplicationConfig_android_package_name.0, i32 0, i32 0); android_package_name
+	i8* getelementptr inbounds ([13 x i8], [13 x i8]* @__ApplicationConfig_android_package_name.0, i32 0, i32 0); android_package_name
 }, align 4
 
 @__DSOCacheEntry_name.1 = internal constant [31 x i8] c"libxamarin-debug-app-helper.so\00", align 1

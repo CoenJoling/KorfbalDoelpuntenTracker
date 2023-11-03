@@ -258,7 +258,6 @@ C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\mono\MonoPackageManager_Resources.java
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\xamarin\essentials\fileProvider.java
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\bin\packaged_resources
-C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\com\companyname\score\R.java
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\typemaps.arm64-v8a.o
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\typemaps.armeabi-v7a.o
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\typemaps.x86.o
