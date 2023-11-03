@@ -220,7 +220,7 @@ namespace Score
             // Add a button to dismiss the dialog
             dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
             {
-                // Handle button click event here if needed
+                Toast.MakeText(this, "Score geannuleerd!", ToastLength.Short).Show();
             });
 
             // Create and show the dialog
