@@ -1,14 +1,13 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidX.AppCompat.App;
-using CsvHelper;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
@@ -59,7 +58,7 @@ namespace Score
             startButton = FindViewById<Button>(Resource.Id.startButton);
             pauseButton = FindViewById<Button>(Resource.Id.pauseButton);
             resetButton = FindViewById<Button>(Resource.Id.resetButton);
-            
+
             textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
             textViewScoreUit = FindViewById<TextView>(Resource.Id.textViewScoreUit);
 
@@ -104,38 +103,59 @@ namespace Score
         private void EindeWedstrijd(object sender, EventArgs e)
         {
             var dateTimeNow = DateTime.Now.ToString("ddMMyyyy");
-            var random = new Random();
-            var num = random.Next(1000).ToString();
+            var guid = Guid.NewGuid();
 
-            string path = System.IO.Path.Combine(FilesDir.AbsolutePath, "Download");
-            string fileName = dateTimeNow + num + ".txt";
+            string path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "Download");
+            string fileName = $"{guid}-{dateTimeNow}.txt";
             string filePath = System.IO.Path.Combine(path, fileName);
 
-            // Ensure the directory exists
-            System.IO.Directory.CreateDirectory(path);
-
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                // Write content to the file
-                writer.WriteLine("This is the first line of the text file.");
-                writer.WriteLine("This is the second line of the text file.");
-                writer.WriteLine("And this is the third line.");
-            }
-
-            //var path = Android.OS.Environment.DirectoryDownloads;
-            //var filePath = Path.Combine(path, dateTimeNow + "_" + num + ".csv");
-
-            //using var fs = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write);
-            //using (var writer = new StreamWriter(fs))
-            //using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            //if (!Directory.Exists(path))
             //{
-            //    csv.WriteRecords(scoreList);
+            //    System.IO.Directory.CreateDirectory(path);
             //}
-            scoreList.Clear(); 
+
+            //using (StreamWriter writer = new StreamWriter(filePath))
+            //{
+            //    // Write content to the file
+            //    writer.WriteLine("This is the first line of the text file.");
+            //    writer.WriteLine("This is the second line of the text file.");
+            //    writer.WriteLine("And this is the third line.");
+            //}
+
+            Intent intent = new Intent(Intent.ActionCreateDocument);
+            intent.AddCategory(Intent.CategoryOpenable);
+            intent.SetType("text/plain");
+            intent.PutExtra(Intent.ExtraTitle, fileName);
+
+            StartActivityForResult(intent, 1);
+
+            scoreList.Clear();
             scoreThuis = 0;
             textViewScoreThuis.Text = scoreThuis.ToString();
             scoreUit = 0;
             textViewScoreUit.Text = scoreUit.ToString();
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            if (resultCode == Result.Ok)
+            {
+                Android.Net.Uri uri = data.Data;
+
+                using (Stream stream = ContentResolver.OpenOutputStream(uri))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    writer.WriteLine("This is the first line of the text file.");
+                    writer.WriteLine("This is the second line of the text file.");
+                    writer.WriteLine("And this is the third line.");
+                }
+
+                Toast.MakeText(this, "Bestand opgeslagen!", ToastLength.Short).Show();
+            }
+            else
+            {
+                Toast.MakeText(this, "Bestandsselectie geannuleerd.", ToastLength.Short).Show();
+            }
         }
 
         public bool OnTouch(View v, MotionEvent e)
@@ -180,7 +200,7 @@ namespace Score
             dialogBuilder.SetView(dialogView);
 
             Spinner spinner = dialogView.FindViewById<Spinner>(Resource.Id.spinner1);
-            
+
             var spinnerData = new List<string> { "Doorloopbal", "Afstandsschot", "Strafworp", "VrijeWorp", "KortSchot" };
             var spinnerAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData);
             spinner.Adapter = spinnerAdapter;
@@ -201,7 +221,7 @@ namespace Score
                 scoreData.scoreMethode = selectedSpinnerItem;
 
                 scoreList.Add(scoreData);
-            });     
+            });
             // Add a button to dismiss the dialog
             dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
             {
