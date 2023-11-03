@@ -108,7 +108,7 @@ namespace Score
             var guid = Guid.NewGuid().ToString().Substring(0,8);
 
             string path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "Download");
-            string fileName = $"{guid}-{dateTimeNow}.csv";
+            string fileName = $"{dateTimeNow}-{guid}.csv";
             string filePath = System.IO.Path.Combine(path, fileName);
 
             Intent intent = new Intent(Intent.ActionCreateDocument);
