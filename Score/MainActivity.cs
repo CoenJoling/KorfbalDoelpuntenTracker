@@ -6,8 +6,10 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidX.AppCompat.App;
+using CsvHelper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
@@ -103,37 +105,20 @@ namespace Score
         private void EindeWedstrijd(object sender, EventArgs e)
         {
             var dateTimeNow = DateTime.Now.ToString("ddMMyyyy");
-            var guid = Guid.NewGuid();
+            var guid = Guid.NewGuid().ToString().Substring(0,8);
 
             string path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "Download");
-            string fileName = $"{guid}-{dateTimeNow}.txt";
+            string fileName = $"{guid}-{dateTimeNow}.csv";
             string filePath = System.IO.Path.Combine(path, fileName);
-
-            //if (!Directory.Exists(path))
-            //{
-            //    System.IO.Directory.CreateDirectory(path);
-            //}
-
-            //using (StreamWriter writer = new StreamWriter(filePath))
-            //{
-            //    // Write content to the file
-            //    writer.WriteLine("This is the first line of the text file.");
-            //    writer.WriteLine("This is the second line of the text file.");
-            //    writer.WriteLine("And this is the third line.");
-            //}
 
             Intent intent = new Intent(Intent.ActionCreateDocument);
             intent.AddCategory(Intent.CategoryOpenable);
-            intent.SetType("text/plain");
+            intent.SetType("text/csv");
             intent.PutExtra(Intent.ExtraTitle, fileName);
 
             StartActivityForResult(intent, 1);
 
-            scoreList.Clear();
-            scoreThuis = 0;
-            textViewScoreThuis.Text = scoreThuis.ToString();
-            scoreUit = 0;
-            textViewScoreUit.Text = scoreUit.ToString();
+            
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -144,10 +129,15 @@ namespace Score
 
                 using (Stream stream = ContentResolver.OpenOutputStream(uri))
                 using (StreamWriter writer = new StreamWriter(stream))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    writer.WriteLine("This is the first line of the text file.");
-                    writer.WriteLine("This is the second line of the text file.");
-                    writer.WriteLine("And this is the third line.");
+                    csv.WriteHeader<ScoreDataManager>();
+                    csv.NextRecord();
+                    foreach (var score in scoreList)
+                    {
+                        csv.WriteRecord(score);
+                        csv.NextRecord();
+                    }
                 }
 
                 Toast.MakeText(this, "Bestand opgeslagen!", ToastLength.Short).Show();
@@ -156,6 +146,11 @@ namespace Score
             {
                 Toast.MakeText(this, "Bestandsselectie geannuleerd.", ToastLength.Short).Show();
             }
+            scoreList.Clear();
+            scoreThuis = 0;
+            textViewScoreThuis.Text = scoreThuis.ToString();
+            scoreUit = 0;
+            textViewScoreUit.Text = scoreUit.ToString();
         }
 
         public bool OnTouch(View v, MotionEvent e)
