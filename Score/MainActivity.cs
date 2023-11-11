@@ -196,7 +196,7 @@ namespace Score
 
             Spinner spinner = dialogView.FindViewById<Spinner>(Resource.Id.spinner1);
 
-            var spinnerData = new List<string> { "Doorloopbal", "Afstandsschot", "Strafworp", "VrijeWorp", "KortSchot" };
+            var spinnerData = new List<string> { "Schot", "Doorloopbal", "Strafworp", "Vrije worp" };
             var spinnerAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData);
             spinner.Adapter = spinnerAdapter;
 
