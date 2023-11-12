@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 
 namespace Score
@@ -26,6 +27,7 @@ namespace Score
         //Speel klaar button
         private Button eindeSpel;
 
+        //Stopwatch
         private TextView timeTextView;
         private Button startButton;
         private Button pauseButton;
@@ -44,30 +46,53 @@ namespace Score
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
             RequestedOrientation = ScreenOrientation.Landscape;
+            ToggleScreenLock();
 
             var touchView = FindViewById<View>(Resource.Id.touchView);
             touchView.SetOnTouchListener(this);
 
             scoreDataManager = new ScoreDataManager();
+            //Score manier
+            //doorloopbalButton = FindViewById<Button>(Resource.Id.doorloopbalButton);
+            //schotButton = FindViewById<Button>(Resource.Id.schotButton);
+            //strafworpButton = FindViewById<Button>(Resource.Id.strafworpButton);
+            //vrijeBalButton = FindViewById<Button>(Resource.Id.vrijeBalButton);
+            //doorloopbalButton.Click += (sender, e) =>
+            //{
+            //    scoreData.ScoreMethode = "Doorloopbal";
+            //};
+
+            //schotButton.Click += (sender, e) =>
+            //{
+            //    scoreData.ScoreMethode = "Schot";
+            //};
+
+            //strafworpButton.Click += (sender, e) =>
+            //{
+            //    scoreData.ScoreMethode = "Strafworp";
+            //};
+
+            //vrijeBalButton.Click += (sender, e) =>
+            //{
+            //    scoreData.ScoreMethode = "Vrije bal";
+            //};
 
             eindeSpel = FindViewById<Button>(Resource.Id.eindeSpel);
             this.FindViewById<Button>(Resource.Id.eindeSpel).Click += this.EindeWedstrijd;
 
-            stopwatchManager = new StopwatchManager();
+            textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
+            textViewScoreUit = FindViewById<TextView>(Resource.Id.textViewScoreUit);
 
-            ////Stopwatch dingen
+            #region Stopwatch methodes
             timeTextView = FindViewById<TextView>(Resource.Id.timeTextView);
             startButton = FindViewById<Button>(Resource.Id.startButton);
             pauseButton = FindViewById<Button>(Resource.Id.pauseButton);
             resetButton = FindViewById<Button>(Resource.Id.resetButton);
 
-            textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
-            textViewScoreUit = FindViewById<TextView>(Resource.Id.textViewScoreUit);
-
             // Initialize the StopwatchManager
             stopwatchManager = new StopwatchManager();
 
-            // Attach click event handlers to buttons
+            // Stopwatch click event handlers
             startButton.Click += (sender, e) =>
             {
                 stopwatchManager.Start();
@@ -85,6 +110,12 @@ namespace Score
                 stopwatchManager.Reset();
                 UpdateTime();
             };
+            #endregion
+        }
+
+        public void ToggleScreenLock()
+        {
+            DeviceDisplay.KeepScreenOn = true;
         }
 
         private async void UpdateTime()
@@ -187,24 +218,33 @@ namespace Score
         private void ShowPopup(ScoreDataManager scoreData)
         {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-            dialogBuilder.SetTitle("Score Information");
+            dialogBuilder.SetTitle("Score Informatie");
             dialogBuilder.SetMessage($"Doelpunt" +
-                $": {scoreData.DoelpuntVoorTegen}\nTijd doelpunt: {scoreData.Tijd}\nPlaats doelpunt: {scoreData.PlaatsDoelpunt}\nManier van scoren:");
+                $": {scoreData.DoelpuntVoorTegen}\nTijd doelpunt: {scoreData.Tijd}\nPlaats doelpunt: {scoreData.PlaatsDoelpunt}");
 
             View dialogView = LayoutInflater.Inflate(Resource.Layout.spinner_layout, null);
             dialogBuilder.SetView(dialogView);
 
             Spinner spinner = dialogView.FindViewById<Spinner>(Resource.Id.spinner1);
+            Spinner spinner2 = dialogView.FindViewById<Spinner>(Resource.Id.spinner2);
 
-            var spinnerData = new List<string> { "Schot", "Doorloopbal", "Strafworp", "Vrije worp" };
+            var spinnerData = new List<string> { "Jonne", "Niek", "Bas", "Lucas", "Lisa", "Linde", "Sanne", "Mette", "Kirsten", "Britt" };
             var spinnerAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData);
             spinner.Adapter = spinnerAdapter;
+            var spinnerData2 = new List<string> { "Schot", "Doorloopbal", "Vrije bal", "Strafworp"};
+            var spinnerAdapter2 = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData2);
+            spinner2.Adapter = spinnerAdapter2;
 
             string selectedSpinnerItem = null; // Define a variable to store the selection
+            string selectedSpinnerItem2 = null; // Define a variable to store the selection
 
             spinner.ItemSelected += (sender, e) =>
             {
                 selectedSpinnerItem = spinnerData[e.Position]; // Store the selected item
+            };
+            spinner2.ItemSelected += (sender, e) =>
+            {
+                selectedSpinnerItem2 = spinnerData2[e.Position]; // Store the selected item
             };
 
             // Add a button to dismiss the dialog
@@ -213,7 +253,11 @@ namespace Score
                 if (scoreData.DoelpuntVoorTegen == "Voor") ThuisPlus();
                 if (scoreData.DoelpuntVoorTegen == "Tegen") UitPlus();
 
-                scoreData.scoreMethode = selectedSpinnerItem;
+                scoreData.Wie = selectedSpinnerItem;
+
+                scoreData.ScoreMethode = selectedSpinnerItem2;
+
+                scoreData.Score = $"{scoreThuis.ToString()} - {scoreUit.ToString()}";
 
                 scoreList.Add(scoreData);
             });

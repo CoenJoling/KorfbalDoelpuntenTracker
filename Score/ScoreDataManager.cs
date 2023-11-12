@@ -2,10 +2,12 @@
 {
     public class ScoreDataManager
     {
-        public string DoelpuntVoorTegen { set; get; }
         public string Tijd { set; get; }
+        public string Score { set; get; }
+        public string DoelpuntVoorTegen { set; get; }
+        public string ScoreMethode { set; get; }
+        public string Wie {  set; get; }
         public string PlaatsDoelpunt { set; get; }
-        public string scoreMethode { set; get; }
 
         public ScoreDataManager()
         {
