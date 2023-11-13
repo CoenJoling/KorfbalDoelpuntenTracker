@@ -9,8 +9,8 @@
     <Button
         android:id="@+id/eindeSpel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:textSize="10sp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="Einde wedstrijd" />
@@ -26,29 +26,29 @@
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
         android:textSize="10sp"
+        android:layout_height="35dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/timeTextView"
         android:text="Start" />
 
     <Button
         android:id="@+id/pauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
         android:layout_gravity="center_horizontal"
         android:text="Pause"
+        android:layout_height="35dp"
         android:textSize="10sp"
         android:layout_below="@+id/startButton"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/resetButton"
-        android:layout_width="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
         android:textSize="10sp"
+        android:layout_height="35dp"
+        android:layout_width="70dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/pauseButton"
         android:text="Reset" />
@@ -72,6 +72,16 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:text="0" />
+
+    <Button
+        android:id="@+id/scoreListButton"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:textSize="10sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:text="Scores" />
 
     <View
         android:id="@+id/touchView"

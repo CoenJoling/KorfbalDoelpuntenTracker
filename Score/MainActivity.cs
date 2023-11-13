@@ -46,7 +46,7 @@ namespace Score
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
             RequestedOrientation = ScreenOrientation.Landscape;
-            ToggleScreenLock();
+            DeviceDisplay.KeepScreenOn = true;
 
             var touchView = FindViewById<View>(Resource.Id.touchView);
             touchView.SetOnTouchListener(this);
@@ -79,6 +79,12 @@ namespace Score
 
             eindeSpel = FindViewById<Button>(Resource.Id.eindeSpel);
             this.FindViewById<Button>(Resource.Id.eindeSpel).Click += this.EindeWedstrijd;
+
+            var lijstScores = FindViewById<Button>(Resource.Id.scoreListButton);
+            lijstScores.Click += (sender, e) =>
+            {
+                ShowScores(lijstScores);
+            };
 
             textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
             textViewScoreUit = FindViewById<TextView>(Resource.Id.textViewScoreUit);
@@ -113,11 +119,6 @@ namespace Score
             #endregion
         }
 
-        public void ToggleScreenLock()
-        {
-            DeviceDisplay.KeepScreenOn = true;
-        }
-
         private async void UpdateTime()
         {
             while (true)
@@ -131,6 +132,34 @@ namespace Score
                 // Delay for 10 milliseconds before updating the time again
                 await Task.Delay(10);
             }
+        }
+
+        private void ShowScores(View anchorView)
+        {
+            // Inflate the layout for the popup
+            var inflater = (LayoutInflater)GetSystemService(LayoutInflaterService);
+            var popupView = inflater.Inflate(Resource.Layout.PopupLayout, null);
+
+            // Find the ListView in the popup layout
+            var listView = popupView.FindViewById<ListView>(Resource.Id.listView);
+
+            // Create an adapter for your score data
+            var adapter = new ScoreDataAdapter(this, scoreList);
+
+            // Set the adapter for the ListView
+            listView.Adapter = adapter;
+
+            // Create the popup window
+            var popup = new PopupWindow(popupView, ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, true);
+
+            // Set the location of the popup relative to the anchor view
+            popup.ShowAsDropDown(anchorView);
+            
+            // Set a dismiss event handler for the popup
+            popup.DismissEvent += (sender, e) =>
+            {
+                // Handle dismiss event if needed
+            };
         }
 
         private void EindeWedstrijd(object sender, EventArgs e)
@@ -172,16 +201,18 @@ namespace Score
                 }
 
                 Toast.MakeText(this, "Bestand opgeslagen!", ToastLength.Short).Show();
+
+                scoreList.Clear();
+                scoreThuis = 0;
+                textViewScoreThuis.Text = scoreThuis.ToString();
+                scoreUit = 0;
+                textViewScoreUit.Text = scoreUit.ToString();
             }
             else
             {
                 Toast.MakeText(this, "Bestandsselectie geannuleerd.", ToastLength.Short).Show();
             }
-            scoreList.Clear();
-            scoreThuis = 0;
-            textViewScoreThuis.Text = scoreThuis.ToString();
-            scoreUit = 0;
-            textViewScoreUit.Text = scoreUit.ToString();
+            
         }
 
         public bool OnTouch(View v, MotionEvent e)

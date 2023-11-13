@@ -1,4 +1,9 @@
-﻿namespace Score
+﻿using Android.App;
+using Android.Views;
+using Android.Widget;
+using System.Collections.Generic;
+
+namespace Score
 {
     public class ScoreDataManager
     {
@@ -142,6 +147,43 @@
             {
                 return "Voorkant afstand";
             }
+        }
+    }
+
+    public class ScoreDataAdapter : BaseAdapter<ScoreDataManager>
+    {
+        private readonly Activity context;
+        private readonly List<ScoreDataManager> scoreDataList;
+
+        public ScoreDataAdapter(Activity context, List<ScoreDataManager> scoreDataList)
+        {
+            this.context = context;
+            this.scoreDataList = scoreDataList;
+        }
+
+        public override int Count => scoreDataList.Count;
+
+        public override long GetItemId(int position) => position;
+
+        public override ScoreDataManager this[int position] => scoreDataList[position];
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            var view = convertView ?? context.LayoutInflater.Inflate(Resource.Layout.ScoreDataItem, null);
+
+            // Customize the layout for each item in the list
+            var scoreData = scoreDataList[position];
+
+            // Find and set values to your TextViews in the item layout
+            var scoreTextView = view.FindViewById<TextView>(Resource.Id.scoreTextView);
+            scoreTextView.Text = $"Score: {scoreData.Score}";
+
+            var timeTextView = view.FindViewById<TextView>(Resource.Id.wieWatView);
+            timeTextView.Text = $"{scoreData.ScoreMethode} {scoreData.DoelpuntVoorTegen.ToLower()} {scoreData.Wie}";
+
+            // Add more TextViews and customize as needed
+
+            return view;
         }
     }
 }
