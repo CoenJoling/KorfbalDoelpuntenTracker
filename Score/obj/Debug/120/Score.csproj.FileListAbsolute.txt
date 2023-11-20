@@ -337,3 +337,9 @@ C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\bin\Tracker_1.x0.aab
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\bin\Tracker_1.x0.apks
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\tracker_1\x0\R.java
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\popuplayout.xml
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\scoredataitem.xml
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\crc64a8256fd62bfbb94c\ScoreDataAdapter.java
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\spinner_kans_layout.xml
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\kansendataitem.xml
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\crc64a8256fd62bfbb94c\KansenDataAdapter.java

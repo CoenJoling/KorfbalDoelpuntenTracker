@@ -7,6 +7,15 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/kans"
+        android:layout_width="wrap_content"
+        android:textSize="10sp"
+        android:layout_height="35dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/eindeSpel"
+        android:text="Kans" />
+
+    <Button
         android:id="@+id/eindeSpel"
         android:layout_width="wrap_content"
         android:textSize="10sp"
@@ -75,13 +84,21 @@
 
     <Button
         android:id="@+id/scoreListButton"
-        android:layout_width="70dp"
+        android:layout_width="78dp"
         android:layout_height="35dp"
         android:textSize="10sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
         android:text="Scores" />
+
+    <Button
+        android:id="@+id/kansenListButton"
+        android:layout_width="78dp"
+        android:layout_height="35dp"
+        android:textSize="10sp"
+        android:layout_below="@id/scoreListButton"
+        android:text="Kansen" />
 
     <View
         android:id="@+id/touchView"

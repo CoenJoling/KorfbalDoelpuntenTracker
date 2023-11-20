@@ -3,6 +3,7 @@ adaptive-icon;obj\Release\120\res\mipmap-anydpi-v26\ic_launcher_round.xml
 background;obj\Release\120\res\mipmap-anydpi-v26\ic_launcher.xml
 background;obj\Release\120\res\mipmap-anydpi-v26\ic_launcher_round.xml
 Button;obj\Release\120\res\layout\activity_main.xml
+Button;obj\Release\120\res\layout\scoredataitem.xml
 cache-path;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Release\120\lp\38\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
 color;obj\Release\120\res\values\colors.xml
 color;obj\Release\120\res\values\ic_launcher_background.xml
@@ -12,7 +13,9 @@ external-path;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Rel
 foreground;obj\Release\120\res\mipmap-anydpi-v26\ic_launcher.xml
 foreground;obj\Release\120\res\mipmap-anydpi-v26\ic_launcher_round.xml
 item;obj\Release\120\res\values\styles.xml
+LinearLayout;obj\Release\120\res\layout\kansendataitem.xml
 LinearLayout;obj\Release\120\res\layout\scoredataitem.xml
+LinearLayout;obj\Release\120\res\layout\spinner_kans_layout.xml
 LinearLayout;obj\Release\120\res\layout\spinner_layout.xml
 ListView;obj\Release\120\res\layout\popuplayout.xml
 paths;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Release\120\lp\38\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
@@ -22,9 +25,11 @@ resources;obj\Release\120\res\values\dimens.xml
 resources;obj\Release\120\res\values\ic_launcher_background.xml
 resources;obj\Release\120\res\values\strings.xml
 resources;obj\Release\120\res\values\styles.xml
+Spinner;obj\Release\120\res\layout\spinner_kans_layout.xml
 Spinner;obj\Release\120\res\layout\spinner_layout.xml
 string;obj\Release\120\res\values\strings.xml
 style;obj\Release\120\res\values\styles.xml
 TextView;obj\Release\120\res\layout\activity_main.xml
+TextView;obj\Release\120\res\layout\kansendataitem.xml
 TextView;obj\Release\120\res\layout\scoredataitem.xml
 View;obj\Release\120\res\layout\activity_main.xml

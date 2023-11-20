@@ -2,6 +2,7 @@
 using Android.Views;
 using Android.Widget;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Score
 {
@@ -13,6 +14,7 @@ namespace Score
         public string ScoreMethode { set; get; }
         public string Wie {  set; get; }
         public string PlaatsDoelpunt { set; get; }
+        public int Kansen {  set; get; }
 
         public ScoreDataManager()
         {
@@ -148,7 +150,85 @@ namespace Score
                 return "Voorkant afstand";
             }
         }
+
+        public static Dictionary<string, int> CalculateGoals(List<ScoreDataManager> scoreList)
+        {
+            // Group the scoreList by Wie and count the goals for each player
+            var goalCounts = scoreList.Where(s => s.DoelpuntVoorTegen == "Voor")
+                                      .GroupBy(s => s.Wie)
+                                      .ToDictionary(g => g.Key, g => g.Count());
+
+            return goalCounts;
+        }
     }
+
+    public class Kansen
+    {
+        public int Kans { get; set; }
+        public string Tijd { get; set; }
+        public string Wie { get; set; }
+        public bool Doelpunt { get; set; }
+    }
+
+    public class KansenDataAdapter : BaseAdapter<IGrouping<string, Kansen>>
+    {
+        private readonly Activity context;
+        private readonly List<IGrouping<string, Kansen>> groupedKansenData;
+        private readonly List<ScoreDataManager> scoreList;
+
+        public KansenDataAdapter(Activity context, List<IGrouping<string, Kansen>> groupedKansenData, List<ScoreDataManager> scoreList)
+        {
+            this.context = context;
+            this.groupedKansenData = groupedKansenData;
+            this.scoreList = scoreList;
+        }
+
+        public override int Count => groupedKansenData.Count;
+
+        public override long GetItemId(int position) => position;
+
+        public override IGrouping<string, Kansen> this[int position] => groupedKansenData[position];
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            var view = convertView ?? context.LayoutInflater.Inflate(Resource.Layout.KansenDataItem, null);
+
+            // Customize the layout for each grouped item in the list
+            var groupedItem = groupedKansenData[position];
+
+            // Find and set values to your TextViews in the grouped item layout
+            var wieTextView = view.FindViewById<TextView>(Resource.Id.wieTextView);
+            if (groupedItem.Count() ==1)
+            {
+                wieTextView.Text = $"{groupedItem.Key} {groupedItem.Count()} kans";
+            }
+            else
+            {
+                wieTextView.Text = $"{groupedItem.Key} {groupedItem.Count()} kansen";
+            }
+
+            int totalCount = groupedItem.Sum(k => k.Kans);
+
+            // Calculate and display the goal count for the player
+            var goalCounts = ScoreDataManager.CalculateGoals(scoreList);
+            if (goalCounts.TryGetValue(groupedItem.Key, out int goalCount))
+            {
+                var goalCountTextView = view.FindViewById<TextView>(Resource.Id.goalCountTextView);
+                var ratio = (double)goalCount / groupedItem.Count();
+                goalCountTextView.Text = $"Goals: {goalCount} -> {ratio:P}";
+
+                // Calculate and display the goal-to-kansen ratio
+                //var ratioTextView = view.FindViewById<TextView>(Resource.Id.ratioTextView);
+                //double ratio = (double)goalCount / totalCount;
+                //ratioTextView.Text = $"Ratio: {ratio:P}";
+            }
+
+
+            return view;
+        }
+    }
+
+
 
     public class ScoreDataAdapter : BaseAdapter<ScoreDataManager>
     {
@@ -182,6 +262,31 @@ namespace Score
             timeTextView.Text = $"{scoreData.ScoreMethode} {scoreData.DoelpuntVoorTegen.ToLower()} {scoreData.Wie}";
 
             // Add more TextViews and customize as needed
+
+            //var deleteButton = view.FindViewById<Button>(Resource.Id.deleteButton);
+
+            //deleteButton.Click += (sender, e) =>
+            //{
+            //    // Show a confirmation dialog
+            //    var confirmDialog = new AlertDialog.Builder(context)
+            //        .SetTitle("Confirm Delete")
+            //        .SetMessage("Are you sure you want to delete this entry?")
+            //        .SetPositiveButton("Yes", (s, a) =>
+            //        {
+            //            //if (scoreData.DoelpuntVoorTegen == "Voor") kansen.Kans--;
+            //            if (scoreData.DoelpuntVoorTegen == "Voor")  
+            //            if (scoreData.DoelpuntVoorTegen == "Voor")
+            //                    // Remove the corresponding entry from the list
+            //                    scoreDataList.RemoveAt(position);S
+
+            //            // Notify the adapter that the data set has changed
+            //            NotifyDataSetChanged();
+            //        })
+            //        .SetNegativeButton("No", (s, a) => { })
+            //        .Create();
+
+            //    confirmDialog.Show();
+            //};
 
             return view;
         }

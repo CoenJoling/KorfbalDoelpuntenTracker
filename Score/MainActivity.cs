@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
@@ -23,9 +24,14 @@ namespace Score
         //ScoreData
         private ScoreDataManager scoreDataManager;
         private List<ScoreDataManager> scoreList = new List<ScoreDataManager>();
+        private Kansen kansen;
+        private List<Kansen> kansenList = new List<Kansen>();
 
         //Speel klaar button
         private Button eindeSpel;
+
+        //Kans button
+        private Button kans;
 
         //Stopwatch
         private TextView timeTextView;
@@ -43,7 +49,7 @@ namespace Score
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
             RequestedOrientation = ScreenOrientation.Landscape;
             DeviceDisplay.KeepScreenOn = true;
@@ -52,38 +58,24 @@ namespace Score
             touchView.SetOnTouchListener(this);
 
             scoreDataManager = new ScoreDataManager();
-            //Score manier
-            //doorloopbalButton = FindViewById<Button>(Resource.Id.doorloopbalButton);
-            //schotButton = FindViewById<Button>(Resource.Id.schotButton);
-            //strafworpButton = FindViewById<Button>(Resource.Id.strafworpButton);
-            //vrijeBalButton = FindViewById<Button>(Resource.Id.vrijeBalButton);
-            //doorloopbalButton.Click += (sender, e) =>
-            //{
-            //    scoreData.ScoreMethode = "Doorloopbal";
-            //};
-
-            //schotButton.Click += (sender, e) =>
-            //{
-            //    scoreData.ScoreMethode = "Schot";
-            //};
-
-            //strafworpButton.Click += (sender, e) =>
-            //{
-            //    scoreData.ScoreMethode = "Strafworp";
-            //};
-
-            //vrijeBalButton.Click += (sender, e) =>
-            //{
-            //    scoreData.ScoreMethode = "Vrije bal";
-            //};
+            kansen = new Kansen();
 
             eindeSpel = FindViewById<Button>(Resource.Id.eindeSpel);
             this.FindViewById<Button>(Resource.Id.eindeSpel).Click += this.EindeWedstrijd;
+
+            kans = FindViewById<Button>(Resource.Id.kans);
+            this.FindViewById<Button>(Resource.Id.kans).Click += this.KansGenomen;
 
             var lijstScores = FindViewById<Button>(Resource.Id.scoreListButton);
             lijstScores.Click += (sender, e) =>
             {
                 ShowScores(lijstScores);
+            };
+
+            var lijstKansen = FindViewById<Button>(Resource.Id.kansenListButton);
+            lijstKansen.Click += (sender, e) =>
+            {
+                ShowKansen(lijstKansen);
             };
 
             textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
@@ -134,6 +126,37 @@ namespace Score
             }
         }
 
+        private void ShowKansen(View anchorView)
+        {
+            // Group the kansen data by Wie
+            var groupedKansenData = kansenList.GroupBy(k => k.Wie).ToList();
+
+            // Inflate the layout for the popup
+            var inflater = (LayoutInflater)GetSystemService(LayoutInflaterService);
+            var popupView = inflater.Inflate(Resource.Layout.PopupLayout, null);
+
+            // Find the ListView in the popup layout
+            var listView = popupView.FindViewById<ListView>(Resource.Id.listView);
+
+            // Create an adapter for your grouped score data
+            var adapter = new KansenDataAdapter(this, groupedKansenData, scoreList);
+
+            // Set the adapter for the ListView
+            listView.Adapter = adapter;
+
+            // Create the popup window
+            var popup = new PopupWindow(popupView, ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, true);
+
+            // Set the location of the popup relative to the anchor view
+            popup.ShowAsDropDown(anchorView);
+
+            // Set a dismiss event handler for the popup
+            popup.DismissEvent += (sender, e) =>
+            {
+                // Handle dismiss event if needed
+            };
+        }
+
         private void ShowScores(View anchorView)
         {
             // Inflate the layout for the popup
@@ -162,6 +185,58 @@ namespace Score
             };
         }
 
+        private void KansGenomen(object send, EventArgs e)
+        {
+            var kans = new Kansen();
+            ShowPopupKans(kans);
+        }
+
+        private void ShowPopupKans(Kansen kans)
+        {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.SetTitle("Kans genomen");
+            dialogBuilder.SetMessage($"Kans genomen door:");
+
+            View dialogView = LayoutInflater.Inflate(Resource.Layout.spinner_kans_layout, null);
+            dialogBuilder.SetView(dialogView);
+
+            Spinner spinner3 = dialogView.FindViewById<Spinner>(Resource.Id.spinner3);
+
+            var spinnerData3 = new List<string> { "Jonne", "Niek", "Bas", "Lucas", "Lisa", "Linde", "Sanne", "Mette", "Kirsten", "Britt", "Anders..." };
+            var spinnerAdapter3 = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData3);
+            spinner3.Adapter = spinnerAdapter3;
+
+            string selectedSpinnerItem3 = null; // Define a variable to store the selection
+
+            spinner3.ItemSelected += (sender, e) =>
+            {
+                selectedSpinnerItem3 = spinnerData3[e.Position]; // Store the selected item
+            };
+
+            // Add a button to dismiss the dialog
+            dialogBuilder.SetPositiveButton("OK", (sender, args) =>
+            {
+                kansen.Kans++;
+                kans.Kans = kansen.Kans;
+                kansen.Wie = selectedSpinnerItem3;
+                kans.Wie = kansen.Wie;
+                kansen.Tijd = timeTextView.Text;
+                kans.Tijd = kansen.Tijd;
+                kansen.Doelpunt = false;
+                kans.Doelpunt = false;
+                kansenList.Add(kans);
+            });
+            // Add a button to dismiss the dialog
+            dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
+            {
+                Toast.MakeText(this, "Kans geannuleerd!", ToastLength.Short).Show();
+            });
+
+            // Create and show the dialog
+            AlertDialog dialog = dialogBuilder.Create();
+            dialog.Show();
+        }
+
         private void EindeWedstrijd(object sender, EventArgs e)
         {
             var dateTimeNow = DateTime.Now.ToString("ddMMyyyy");
@@ -177,8 +252,6 @@ namespace Score
             intent.PutExtra(Intent.ExtraTitle, fileName);
 
             StartActivityForResult(intent, 1);
-
-            
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -187,13 +260,15 @@ namespace Score
             {
                 Android.Net.Uri uri = data.Data;
 
+                scoreList[scoreList.Count - 1].Kansen = kansen.Kans;
+
                 using (Stream stream = ContentResolver.OpenOutputStream(uri))
                 using (StreamWriter writer = new StreamWriter(stream))
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    csv.WriteHeader<ScoreDataManager>();
+                    csv.WriteHeader<Kansen>();
                     csv.NextRecord();
-                    foreach (var score in scoreList)
+                    foreach (var score in kansenList)
                     {
                         csv.WriteRecord(score);
                         csv.NextRecord();
@@ -212,7 +287,6 @@ namespace Score
             {
                 Toast.MakeText(this, "Bestandsselectie geannuleerd.", ToastLength.Short).Show();
             }
-            
         }
 
         public bool OnTouch(View v, MotionEvent e)
@@ -239,14 +313,14 @@ namespace Score
                         scoreDataManager.CheckPlaatsTegenDoelpunt(x, y, screenHeight, screenWidth);
                     scoreData.Tijd = timeTextView.Text;
 
-                    ShowPopup(scoreData);
+                    ShowPopupScore(scoreData);
 
                     break;
             }
             return true;
         }
 
-        private void ShowPopup(ScoreDataManager scoreData)
+        private void ShowPopupScore(ScoreDataManager scoreData)
         {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.SetTitle("Score Informatie");
@@ -278,11 +352,12 @@ namespace Score
                 selectedSpinnerItem2 = spinnerData2[e.Position]; // Store the selected item
             };
 
+            var kansUitScore = new Kansen();
             // Add a button to dismiss the dialog
             dialogBuilder.SetPositiveButton("OK", (sender, args) =>
             {
-                if (scoreData.DoelpuntVoorTegen == "Voor") ThuisPlus();
-                if (scoreData.DoelpuntVoorTegen == "Tegen") UitPlus();
+                if (scoreData.DoelpuntVoorTegen == "Voor") ThuisPlus("plus");
+                if (scoreData.DoelpuntVoorTegen == "Tegen") UitPlus("plus");
 
                 scoreData.Wie = selectedSpinnerItem;
 
@@ -290,7 +365,21 @@ namespace Score
 
                 scoreData.Score = $"{scoreThuis.ToString()} - {scoreUit.ToString()}";
 
+                if (scoreData.DoelpuntVoorTegen == "Voor")
+                {
+                    kansen.Kans++;
+                    scoreData.Kansen = kansen.Kans;
+                    kansUitScore.Kans = kansen.Kans;
+                    kansen.Wie = scoreData.Wie;
+                    kansUitScore.Wie = scoreData.Wie;
+                    kansen.Tijd = scoreData.Tijd;
+                    kansen.Doelpunt = true;
+                    kansUitScore.Doelpunt = true;
+                    kansUitScore.Tijd = scoreData.Tijd;
+                }
+
                 scoreList.Add(scoreData);
+                kansenList.Add(kansUitScore);
             });
             // Add a button to dismiss the dialog
             dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
@@ -303,15 +392,23 @@ namespace Score
             dialog.Show();
         }
 
-        private void ThuisPlus()
+        public void ThuisPlus(string plusMin)
         {
-            scoreThuis++;
+            if (plusMin == "plus")
+            {
+                scoreThuis++;
+            }
+            else { scoreThuis--;}
             textViewScoreThuis.Text = scoreThuis.ToString();
         }
 
-        private void UitPlus()
+        public void UitPlus(string plusMin)
         {
-            scoreUit++;
+            if (plusMin == "plus")
+            {
+                scoreUit++;
+            }
+            else { scoreUit--; }
             textViewScoreUit.Text = scoreUit.ToString();
         }
     }
