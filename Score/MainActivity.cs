@@ -29,6 +29,7 @@ namespace Score
 
         //Speel klaar button
         private Button eindeSpel;
+        private Button exportKansen;
 
         //Kans button
         private Button kans;
@@ -62,6 +63,9 @@ namespace Score
 
             eindeSpel = FindViewById<Button>(Resource.Id.eindeSpel);
             this.FindViewById<Button>(Resource.Id.eindeSpel).Click += this.EindeWedstrijd;
+
+            eindeSpel = FindViewById<Button>(Resource.Id.exportKansen);
+            this.FindViewById<Button>(Resource.Id.exportKansen).Click += this.ExportKansen;
 
             kans = FindViewById<Button>(Resource.Id.kans);
             this.FindViewById<Button>(Resource.Id.kans).Click += this.KansGenomen;
@@ -237,21 +241,53 @@ namespace Score
             dialog.Show();
         }
 
-        private void EindeWedstrijd(object sender, EventArgs e)
+        private async void ExportKansen(object sender, EventArgs e)
         {
             var dateTimeNow = DateTime.Now.ToString("ddMMyyyy");
-            var guid = Guid.NewGuid().ToString().Substring(0,8);
+            var guid = Guid.NewGuid().ToString().Substring(0, 8);
+            string path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "Download");
 
-            string path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "Download");
-            string fileName = $"{dateTimeNow}-{guid}.csv";
-            string filePath = System.IO.Path.Combine(path, fileName);
+            string kansenFileName = $"{dateTimeNow}-{guid}-kansen.csv";
+            
+            Intent kansenIntent = new Intent(Intent.ActionCreateDocument);
+            kansenIntent.AddCategory(Intent.CategoryOpenable);
+            kansenIntent.SetType("text/csv");
+            kansenIntent.PutExtra(Intent.ExtraTitle, kansenFileName);
 
-            Intent intent = new Intent(Intent.ActionCreateDocument);
-            intent.AddCategory(Intent.CategoryOpenable);
-            intent.SetType("text/csv");
-            intent.PutExtra(Intent.ExtraTitle, fileName);
+            // Start activity for Kansen file
+            StartActivityForResult(kansenIntent, 2);
+        }
 
-            StartActivityForResult(intent, 1);
+        private async void EindeWedstrijd(object sender, EventArgs e)
+        {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.SetTitle("Einde Wedstrijd!");
+            dialogBuilder.SetMessage($"Alles zal resetten. Echt afsluiten?");
+
+            dialogBuilder.SetPositiveButton("OK", (sender, args) =>
+            {
+                scoreList.Last().Kansen = kansenList.Last().Kans;
+
+                var dateTimeNow = DateTime.Now.ToString("ddMMyyyy");
+                var guid = Guid.NewGuid().ToString().Substring(0, 8);
+
+                string path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "Download");
+
+                // File paths for ScoreDataManager and Kansen
+                string scoreFileName = $"{dateTimeNow}-{guid}-score.csv";
+                string scoreFilePath = Path.Combine(path, scoreFileName);
+
+                // Create an intent for ScoreDataManager file
+                Intent scoreIntent = new Intent(Intent.ActionCreateDocument);
+                scoreIntent.AddCategory(Intent.CategoryOpenable);
+                scoreIntent.SetType("text/csv");
+                scoreIntent.PutExtra(Intent.ExtraTitle, scoreFileName);
+
+                // Start activity for ScoreDataManager file
+                StartActivityForResult(scoreIntent, 1);
+            });
+            AlertDialog dialog = dialogBuilder.Create();
+            dialog.Show();
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -260,28 +296,45 @@ namespace Score
             {
                 Android.Net.Uri uri = data.Data;
 
-                scoreList[scoreList.Count - 1].Kansen = kansen.Kans;
-
-                using (Stream stream = ContentResolver.OpenOutputStream(uri))
-                using (StreamWriter writer = new StreamWriter(stream))
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                switch (requestCode)
                 {
-                    csv.WriteHeader<Kansen>();
-                    csv.NextRecord();
-                    foreach (var score in kansenList)
-                    {
-                        csv.WriteRecord(score);
-                        csv.NextRecord();
-                    }
+                    case 1: // ScoreDataManager file
+                        using (Stream stream = ContentResolver.OpenOutputStream(uri))
+                        using (StreamWriter writer = new StreamWriter(stream))
+                        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                        {
+                            csv.WriteHeader<ScoreDataManager>();
+                            csv.NextRecord();
+                            foreach (var score in scoreList)
+                            {
+                                csv.WriteRecord(score);
+                                csv.NextRecord();
+                            }
+                        }
+                        scoreList.Clear();
+                        kansenList.Clear();
+                        scoreThuis = 0;
+                        textViewScoreThuis.Text = scoreThuis.ToString();
+                        scoreUit = 0;
+                        textViewScoreUit.Text = scoreUit.ToString();
+
+                        break;
+
+                    case 2: // Kansen file
+                        using (Stream stream = ContentResolver.OpenOutputStream(uri))
+                        using (StreamWriter writer = new StreamWriter(stream))
+                        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                        {
+                            csv.WriteHeader<Kansen>();
+                            csv.NextRecord();
+                            foreach (var kansen in kansenList)
+                            {
+                                csv.WriteRecord(kansen);
+                                csv.NextRecord();
+                            }
+                        }
+                        break;
                 }
-
-                Toast.MakeText(this, "Bestand opgeslagen!", ToastLength.Short).Show();
-
-                scoreList.Clear();
-                scoreThuis = 0;
-                textViewScoreThuis.Text = scoreThuis.ToString();
-                scoreUit = 0;
-                textViewScoreUit.Text = scoreUit.ToString();
             }
             else
             {

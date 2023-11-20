@@ -24,6 +24,16 @@
         android:layout_centerHorizontal="true"
         android:text="Einde wedstrijd" />
 
+    <Button
+        android:id="@+id/exportKansen"
+        android:layout_width="wrap_content"
+        android:textSize="10sp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/eindeSpel"
+        android:text="Export Kansen" />
+
     <TextView
         android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
