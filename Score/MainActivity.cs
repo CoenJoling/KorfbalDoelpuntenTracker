@@ -242,7 +242,7 @@ namespace Score
             dialog.Show();
         }
 
-        private async void ExportKansen(object sender, EventArgs e)
+        private void ExportKansen(object sender, EventArgs e)
         {
             var dateTimeNow = DateTime.Now.ToString("ddMMyyyy");
             var guid = Guid.NewGuid().ToString().Substring(0, 8);
@@ -259,7 +259,7 @@ namespace Score
             StartActivityForResult(kansenIntent, 2);
         }
 
-        private async void EindeWedstrijd(object sender, EventArgs e)
+        private void EindeWedstrijd(object sender, EventArgs e)
         {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.SetTitle("Einde Wedstrijd!");
@@ -287,6 +287,12 @@ namespace Score
                 // Start activity for ScoreDataManager file
                 StartActivityForResult(scoreIntent, 1);
             });
+
+            dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
+            {
+                Toast.MakeText(this, "Geannuleerd!", ToastLength.Short).Show();
+            });
+
             AlertDialog dialog = dialogBuilder.Create();
             dialog.Show();
         }
