@@ -196,6 +196,11 @@ namespace Score
             // Customize the layout for each grouped item in the list
             var groupedItem = groupedKansenData[position];
 
+            if (groupedItem.Key == null)
+            {
+                return view;
+            }
+
             // Find and set values to your TextViews in the grouped item layout
             var wieTextView = view.FindViewById<TextView>(Resource.Id.wieTextView);
             if (groupedItem.Count() ==1)
@@ -216,13 +221,7 @@ namespace Score
                 var goalCountTextView = view.FindViewById<TextView>(Resource.Id.goalCountTextView);
                 var ratio = (double)goalCount / groupedItem.Count();
                 goalCountTextView.Text = $"Goals: {goalCount} -> {ratio:P}";
-
-                // Calculate and display the goal-to-kansen ratio
-                //var ratioTextView = view.FindViewById<TextView>(Resource.Id.ratioTextView);
-                //double ratio = (double)goalCount / totalCount;
-                //ratioTextView.Text = $"Ratio: {ratio:P}";
             }
-
 
             return view;
         }

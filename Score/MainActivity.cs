@@ -143,6 +143,7 @@ namespace Score
             var listView = popupView.FindViewById<ListView>(Resource.Id.listView);
 
             // Create an adapter for your grouped score data
+            groupedKansenData = groupedKansenData.Where(item => item.Key != null).ToList();
             var adapter = new KansenDataAdapter(this, groupedKansenData, scoreList);
 
             // Set the adapter for the ListView
