@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.AppCompat.App;
 using CsvHelper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,6 +31,9 @@ namespace Score
         //Speel klaar button
         private Button eindeSpel;
         private Button exportKansen;
+
+        //Setting button
+        private Button settingsButton;
 
         //Kans button
         private Button kans;
@@ -61,6 +65,16 @@ namespace Score
             scoreDataManager = new ScoreDataManager();
             kansen = new Kansen();
 
+            // Get a reference to the settings button
+            settingsButton = FindViewById<Button>(Resource.Id.settingsButton);
+
+            // Set a click event handler for the settings button
+            settingsButton.Click += (sender, e) =>
+            {
+                // Launch the PlayerSettingsActivity
+                StartActivity(typeof(PlayerSettingsActivity));
+            };
+
             eindeSpel = FindViewById<Button>(Resource.Id.eindeSpel);
             this.FindViewById<Button>(Resource.Id.eindeSpel).Click += this.EindeWedstrijd;
 
@@ -81,6 +95,12 @@ namespace Score
             {
                 ShowKansen(lijstKansen);
             };
+
+            // Load player names from SharedPreferences
+            var sharedPreferences = GetSharedPreferences("PlayerSettings", FileCreationMode.Private);
+            var jsonPlayerNames = sharedPreferences.GetString("PlayerNames", string.Empty);
+            var playerNames = JsonConvert.DeserializeObject<List<string>>(jsonPlayerNames) ?? new List<string>();
+
 
             textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
             textViewScoreUit = FindViewById<TextView>(Resource.Id.textViewScoreUit);

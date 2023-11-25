@@ -343,3 +343,6 @@ C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\spinner_kans_layout.xml
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\kansendataitem.xml
 C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\crc64a8256fd62bfbb94c\KansenDataAdapter.java
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\res\layout\playersettings.xml
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\assets\Newtonsoft.Json.dll
+C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\android\src\crc64a8256fd62bfbb94c\PlayerSettingsActivity.java

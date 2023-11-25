@@ -1,3 +1,6 @@
+Score.PlayerSettingsActivity, Score;crc64a8256fd62bfbb94c.PlayerSettingsActivity
+Score.PlayerSettingsActivity;crc64a8256fd62bfbb94c.PlayerSettingsActivity
+score.PlayerSettingsActivity;crc64a8256fd62bfbb94c.PlayerSettingsActivity
 Score.MainActivity, Score;crc64a8256fd62bfbb94c.MainActivity
 Score.MainActivity;crc64a8256fd62bfbb94c.MainActivity
 score.MainActivity;crc64a8256fd62bfbb94c.MainActivity

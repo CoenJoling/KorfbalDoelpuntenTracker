@@ -38,7 +38,7 @@
         android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:textSize="17sp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:text="00:00" />
@@ -71,6 +71,16 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/pauseButton"
         android:text="Reset" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_gravity="center_horizontal"
+        android:textSize="8sp"
+        android:layout_height="35dp"
+        android:layout_width="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/resetButton"
+        android:text="Spelers" />
 
     <TextView
         android:id="@+id/textViewScoreUit"
