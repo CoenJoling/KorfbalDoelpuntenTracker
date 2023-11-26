@@ -15,6 +15,7 @@ namespace Score
         private Button saveButton;
         private ListView playersListView;
         private List<string> existingPlayerNames;
+        private Button deleteButton;
 
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -26,12 +27,14 @@ namespace Score
             playerNameEditText = FindViewById<EditText>(Resource.Id.playerNameEditText);
             saveButton = FindViewById<Button>(Resource.Id.saveButton);
             playersListView = FindViewById<ListView>(Resource.Id.playersListView);
+            deleteButton = FindViewById<Button>(Resource.Id.deleteButton); 
+
 
             // Load existing player names from SharedPreferences
-            var existingPlayerNames = LoadPlayerNames();
+            this.existingPlayerNames = LoadPlayerNames();
 
             // Set up the adapter for the ListView
-            var adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, existingPlayerNames);
+            var adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, this.existingPlayerNames);
             playersListView.Adapter = adapter;
 
             // Handle save button click
@@ -43,20 +46,45 @@ namespace Score
                 if (!string.IsNullOrEmpty(newPlayerName))
                 {
                     // Add the new player name to the existing list
-                    existingPlayerNames.Add(newPlayerName);
+                    this.existingPlayerNames.Add(newPlayerName);
 
                     // Save the updated player names to SharedPreferences
-                    SavePlayerNames(existingPlayerNames);
+                    SavePlayerNames(this.existingPlayerNames);
 
                     adapter.NotifyDataSetChanged();
 
                     Toast.MakeText(this, $"{newPlayerName} opgeslagen", ToastLength.Short).Show();
                     playerNameEditText.Text = string.Empty;
+
+                    this.Recreate();
+                }
+            };
+
+            deleteButton.Click += (sender, e) =>
+            {
+                // Check if an item is selected
+                if (playersListView.CheckedItemPosition != AdapterView.InvalidPosition)
+                {
+                    // Remove the selected item from the list
+                    existingPlayerNames.RemoveAt(playersListView.CheckedItemPosition);
+
+                    // Save the updated player names to SharedPreferences
+                    SavePlayerNames(existingPlayerNames);
+
+                    // Update the ListView
+                    adapter.NotifyDataSetChanged();
+
+                    Toast.MakeText(this, "Speler verwijderd", ToastLength.Short).Show();
+                    this.Recreate();
+                }
+                else
+                {
+                    Toast.MakeText(this, "Selecteer een speler om te verwijderen", ToastLength.Short).Show();
                 }
             };
         }
 
-        private List<string> LoadPlayerNames()
+        public List<string> LoadPlayerNames()
         {
             // Load player names from SharedPreferences
             var sharedPreferences = GetSharedPreferences("PlayerSettings", FileCreationMode.Private);
@@ -77,7 +105,6 @@ namespace Score
 
             editor.PutString("PlayerNames", jsonPlayerNames);
             editor.Apply();
-            
         }
     }
 }

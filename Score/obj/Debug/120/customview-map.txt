@@ -34,5 +34,6 @@ string;obj\Debug\120\res\values\strings.xml
 style;obj\Debug\120\res\values\styles.xml
 TextView;obj\Debug\120\res\layout\activity_main.xml
 TextView;obj\Debug\120\res\layout\kansendataitem.xml
+TextView;obj\Debug\120\res\layout\list_item_player.xml
 TextView;obj\Debug\120\res\layout\scoredataitem.xml
 View;obj\Debug\120\res\layout\activity_main.xml
