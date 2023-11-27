@@ -29,7 +29,6 @@ namespace Score
         private List<Kansen> kansenList = new List<Kansen>();
 
         //Setting button spelers
-        private Button settingsButton;
         private List<string> playerNames;
 
         //Kans button
