@@ -28,15 +28,14 @@ namespace Score
         private Kansen kansen;
         private List<Kansen> kansenList = new List<Kansen>();
 
-        //Speel klaar button
-        private Button eindeSpel;
-        private Button exportKansen;
-
-        //Setting button
+        //Setting button spelers
         private Button settingsButton;
+        private List<string> playerNames;
 
         //Kans button
         private Button kans;
+
+        private Button showPopupMenu;
 
         //Stopwatch
         private TextView timeTextView;
@@ -65,21 +64,32 @@ namespace Score
             scoreDataManager = new ScoreDataManager();
             kansen = new Kansen();
 
-            // Get a reference to the settings button
-            settingsButton = FindViewById<Button>(Resource.Id.settingsButton);
+            showPopupMenu = FindViewById<Button>(Resource.Id.showMenuButton);
 
-            // Set a click event handler for the settings button
-            settingsButton.Click += (sender, e) =>
-            {
-                // Launch the PlayerSettingsActivity
-                StartActivity(typeof(PlayerSettingsActivity));
+            showPopupMenu.Click += (s, arg) => {
+                PopupMenu menu = new PopupMenu(this, showPopupMenu);
+                menu.Inflate(Resource.Menu.popup_menu);
+
+                menu.MenuItemClick += (s1, arg1) => {
+                    switch(arg1.Item.ItemId)
+                    {
+                        case Resource.Id.menu_item_1:
+                            this.ExportKansen(s1, arg1);
+                            break;
+                        case Resource.Id.menu_item_2:
+                            this.EindeWedstrijd(s1, arg1);
+                            break;
+                        case Resource.Id.menu_item_3:
+                            StartActivity(typeof(PlayerSettingsActivity));
+                            break;
+                    }
+                };
+
+                menu.DismissEvent += (s2, arg2) => {
+                    Console.WriteLine("menu dismissed");
+                };
+                menu.Show();
             };
-
-            eindeSpel = FindViewById<Button>(Resource.Id.eindeSpel);
-            this.FindViewById<Button>(Resource.Id.eindeSpel).Click += this.EindeWedstrijd;
-
-            eindeSpel = FindViewById<Button>(Resource.Id.exportKansen);
-            this.FindViewById<Button>(Resource.Id.exportKansen).Click += this.ExportKansen;
 
             kans = FindViewById<Button>(Resource.Id.kans);
             this.FindViewById<Button>(Resource.Id.kans).Click += this.KansGenomen;
@@ -99,7 +109,7 @@ namespace Score
             // Load player names from SharedPreferences
             var sharedPreferences = GetSharedPreferences("PlayerSettings", FileCreationMode.Private);
             var jsonPlayerNames = sharedPreferences.GetString("PlayerNames", string.Empty);
-            var playerNames = JsonConvert.DeserializeObject<List<string>>(jsonPlayerNames) ?? new List<string>();
+            playerNames = JsonConvert.DeserializeObject<List<string>>(jsonPlayerNames) ?? new List<string>();
 
 
             textViewScoreThuis = FindViewById<TextView>(Resource.Id.textViewScoreThuis);
@@ -227,7 +237,7 @@ namespace Score
 
             Spinner spinner3 = dialogView.FindViewById<Spinner>(Resource.Id.spinner3);
 
-            var spinnerData3 = new List<string> { "Jonne", "Niek", "Bas", "Lucas", "Lisa", "Linde", "Sanne", "Mette", "Kirsten", "Britt", "Anders..." };
+            var spinnerData3 = playerNames;
             var spinnerAdapter3 = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData3);
             spinner3.Adapter = spinnerAdapter3;
 
@@ -393,14 +403,18 @@ namespace Score
                         scoreDataManager.CheckPlaatsTegenDoelpunt(x, y, screenHeight, screenWidth);
                     scoreData.Tijd = timeTextView.Text;
 
-                    ShowPopupScore(scoreData);
+                    var sharedPreferences = GetSharedPreferences("PlayerSettings", FileCreationMode.Private);
+                    var jsonPlayerNames = sharedPreferences.GetString("PlayerNames", string.Empty);
+                    playerNames = JsonConvert.DeserializeObject<List<string>>(jsonPlayerNames) ?? new List<string>();
+
+                    ShowPopupScore(scoreData, playerNames);
 
                     break;
             }
             return true;
         }
 
-        private void ShowPopupScore(ScoreDataManager scoreData)
+        private void ShowPopupScore(ScoreDataManager scoreData, List<string> spelers)
         {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.SetTitle("Score Informatie");
@@ -413,7 +427,7 @@ namespace Score
             Spinner spinner = dialogView.FindViewById<Spinner>(Resource.Id.spinner1);
             Spinner spinner2 = dialogView.FindViewById<Spinner>(Resource.Id.spinner2);
 
-            var spinnerData = new List<string> { "Jonne", "Niek", "Bas", "Lucas", "Lisa", "Linde", "Sanne", "Mette", "Kirsten", "Britt", "Anders..." };
+            var spinnerData = playerNames;
             var spinnerAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData);
             spinner.Adapter = spinnerAdapter;
             var spinnerData2 = new List<string> { "Schot", "Doorloopbal", "Vrije bal", "Strafworp"};

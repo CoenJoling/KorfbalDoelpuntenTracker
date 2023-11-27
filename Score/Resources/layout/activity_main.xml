@@ -12,27 +12,8 @@
         android:textSize="10sp"
         android:layout_height="35dp"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/eindeSpel"
+        android:layout_alignParentBottom="true"
         android:text="Kans" />
-
-    <Button
-        android:id="@+id/eindeSpel"
-        android:layout_width="wrap_content"
-        android:textSize="10sp"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Einde wedstrijd" />
-
-    <Button
-        android:id="@+id/exportKansen"
-        android:layout_width="wrap_content"
-        android:textSize="10sp"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@id/eindeSpel"
-        android:text="Export Kansen" />
 
     <TextView
         android:id="@+id/timeTextView"
@@ -72,16 +53,6 @@
         android:layout_below="@id/pauseButton"
         android:text="Reset" />
 
-    <Button
-        android:id="@+id/settingsButton"
-        android:layout_gravity="center_horizontal"
-        android:textSize="8sp"
-        android:layout_height="35dp"
-        android:layout_width="70dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/resetButton"
-        android:text="Spelers" />
-
     <TextView
         android:id="@+id/textViewScoreUit"
         android:layout_width="wrap_content"
@@ -111,6 +82,16 @@
         android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
         android:text="Scores" />
+
+        <Button
+        android:id="@+id/showMenuButton"
+        android:layout_width="78dp"
+        android:layout_height="35dp"
+        android:textSize="10sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:text="Menu" />
 
     <Button
         android:id="@+id/kansenListButton"

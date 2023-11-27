@@ -13,6 +13,7 @@ external-cache-path;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\o
 external-path;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\lp\38\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
 foreground;obj\Debug\120\res\mipmap-anydpi-v26\ic_launcher.xml
 foreground;obj\Debug\120\res\mipmap-anydpi-v26\ic_launcher_round.xml
+item;obj\Debug\120\res\menu\popup_menu.xml
 item;obj\Debug\120\res\values\styles.xml
 LinearLayout;obj\Debug\120\res\layout\kansendataitem.xml
 LinearLayout;obj\Debug\120\res\layout\playersettings.xml
@@ -21,6 +22,7 @@ LinearLayout;obj\Debug\120\res\layout\spinner_kans_layout.xml
 LinearLayout;obj\Debug\120\res\layout\spinner_layout.xml
 ListView;obj\Debug\120\res\layout\playersettings.xml
 ListView;obj\Debug\120\res\layout\popuplayout.xml
+menu;obj\Debug\120\res\menu\popup_menu.xml
 paths;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\lp\38\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
 RelativeLayout;obj\Debug\120\res\layout\activity_main.xml
 resources;obj\Debug\120\res\values\colors.xml
