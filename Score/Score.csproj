@@ -70,7 +70,9 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditScoreActivity.cs" />
     <Compile Include="PlayerSettingsActivity.cs" />
+    <Compile Include="ScoreDataAdapter.cs" />
     <Compile Include="StopwatchManager.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -199,6 +201,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Menu\popup_menu.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\score_overview_activity.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\score_item_layout.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

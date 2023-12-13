@@ -17,6 +17,7 @@
   <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <application android:name="android.app.Application" android:allowBackup="true" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:debuggable="true" android:extractNativeLibs="true" android:icon="@mipmap/ic_launcher" android:label="Korfball Doelpunt Tracker" android:supportsRtl="true" android:theme="@style/AppTheme">
+    <activity android:name="crc64a8256fd62bfbb94c.EditScoreActivity" android:label="Edit score" />
     <activity android:name="crc64a8256fd62bfbb94c.PlayerSettingsActivity" android:label="Player Settings" />
     <activity android:name="crc64a8256fd62bfbb94c.MainActivity" android:exported="true" android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>

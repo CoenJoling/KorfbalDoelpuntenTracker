@@ -81,6 +81,12 @@ namespace Score
                         case Resource.Id.menu_item_3:
                             StartActivity(typeof(PlayerSettingsActivity));
                             break;
+                        case Resource.Id.menu_item_4:
+                            var listAsJson = JsonConvert.SerializeObject(scoreList);
+                            Intent senderIntent = new Intent(this, typeof(EditScoreActivity));
+                            senderIntent.PutExtra("SenderScoreList", listAsJson);
+                            StartActivity(senderIntent);
+                            break;
                     }
                 };
 

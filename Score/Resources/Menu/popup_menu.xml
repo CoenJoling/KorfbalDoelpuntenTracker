@@ -9,4 +9,7 @@
 	<item
         android:id="@+id/menu_item_3"
         android:title="Spelers" />
+	<item
+        android:id="@+id/menu_item_4"
+        android:title="Wijzig score" />
 </menu>

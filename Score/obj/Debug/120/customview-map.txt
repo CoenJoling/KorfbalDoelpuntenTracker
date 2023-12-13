@@ -4,6 +4,7 @@ background;obj\Debug\120\res\mipmap-anydpi-v26\ic_launcher.xml
 background;obj\Debug\120\res\mipmap-anydpi-v26\ic_launcher_round.xml
 Button;obj\Debug\120\res\layout\activity_main.xml
 Button;obj\Debug\120\res\layout\playersettings.xml
+Button;obj\Debug\120\res\layout\score_overview_activity.xml
 cache-path;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\lp\38\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
 color;obj\Debug\120\res\values\colors.xml
 color;obj\Debug\120\res\values\ic_launcher_background.xml
@@ -17,14 +18,18 @@ item;obj\Debug\120\res\menu\popup_menu.xml
 item;obj\Debug\120\res\values\styles.xml
 LinearLayout;obj\Debug\120\res\layout\kansendataitem.xml
 LinearLayout;obj\Debug\120\res\layout\playersettings.xml
+LinearLayout;obj\Debug\120\res\layout\score_item_layout.xml
+LinearLayout;obj\Debug\120\res\layout\score_overview_activity.xml
 LinearLayout;obj\Debug\120\res\layout\scoredataitem.xml
 LinearLayout;obj\Debug\120\res\layout\spinner_kans_layout.xml
 LinearLayout;obj\Debug\120\res\layout\spinner_layout.xml
 ListView;obj\Debug\120\res\layout\playersettings.xml
 ListView;obj\Debug\120\res\layout\popuplayout.xml
+ListView;obj\Debug\120\res\layout\score_overview_activity.xml
 menu;obj\Debug\120\res\menu\popup_menu.xml
 paths;C:\Users\coenj\source\repos\KorfbalDoelpuntenTracker\Score\obj\Debug\120\lp\38\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
 RelativeLayout;obj\Debug\120\res\layout\activity_main.xml
+RelativeLayout;obj\Debug\120\res\layout\score_overview_activity.xml
 resources;obj\Debug\120\res\values\colors.xml
 resources;obj\Debug\120\res\values\dimens.xml
 resources;obj\Debug\120\res\values\ic_launcher_background.xml
@@ -37,5 +42,6 @@ style;obj\Debug\120\res\values\styles.xml
 TextView;obj\Debug\120\res\layout\activity_main.xml
 TextView;obj\Debug\120\res\layout\kansendataitem.xml
 TextView;obj\Debug\120\res\layout\list_item_player.xml
+TextView;obj\Debug\120\res\layout\score_item_layout.xml
 TextView;obj\Debug\120\res\layout\scoredataitem.xml
 View;obj\Debug\120\res\layout\activity_main.xml
