@@ -153,7 +153,6 @@ namespace Score
 
         public static Dictionary<string, int> CalculateGoals(List<ScoreDataManager> scoreList)
         {
-            // Group the scoreList by Wie and count the goals for each player
             var goalCounts = scoreList.Where(s => s.DoelpuntVoorTegen == "Voor")
                                       .GroupBy(s => s.Wie)
                                       .ToDictionary(g => g.Key, g => g.Count());
@@ -193,7 +192,6 @@ namespace Score
         {
             var view = convertView ?? context.LayoutInflater.Inflate(Resource.Layout.KansenDataItem, null);
 
-            // Customize the layout for each grouped item in the list
             var groupedItem = groupedKansenData[position];
 
             if (groupedItem.Key == null)
@@ -201,7 +199,6 @@ namespace Score
                 return view;
             }
 
-            // Find and set values to your TextViews in the grouped item layout
             var wieTextView = view.FindViewById<TextView>(Resource.Id.wieTextView);
             if (groupedItem.Count() ==1)
             {
@@ -214,7 +211,6 @@ namespace Score
 
             int totalCount = groupedItem.Sum(k => k.Kans);
 
-            // Calculate and display the goal count for the player
             var goalCounts = ScoreDataManager.CalculateGoals(scoreList);
             if (goalCounts.TryGetValue(groupedItem.Key, out int goalCount))
             {
@@ -226,8 +222,6 @@ namespace Score
             return view;
         }
     }
-
-
 
     public class ScoreDataAdapter : BaseAdapter<ScoreDataManager>
     {
@@ -250,42 +244,13 @@ namespace Score
         {
             var view = convertView ?? context.LayoutInflater.Inflate(Resource.Layout.ScoreDataItem, null);
 
-            // Customize the layout for each item in the list
             var scoreData = scoreDataList[position];
 
-            // Find and set values to your TextViews in the item layout
             var scoreTextView = view.FindViewById<TextView>(Resource.Id.scoreTextView);
             scoreTextView.Text = $"Score: {scoreData.Score}";
 
             var timeTextView = view.FindViewById<TextView>(Resource.Id.wieWatView);
             timeTextView.Text = $"{scoreData.ScoreMethode} {scoreData.DoelpuntVoorTegen.ToLower()} {scoreData.Wie}";
-
-            // Add more TextViews and customize as needed
-
-            //var deleteButton = view.FindViewById<Button>(Resource.Id.deleteButton);
-
-            //deleteButton.Click += (sender, e) =>
-            //{
-            //    // Show a confirmation dialog
-            //    var confirmDialog = new AlertDialog.Builder(context)
-            //        .SetTitle("Confirm Delete")
-            //        .SetMessage("Are you sure you want to delete this entry?")
-            //        .SetPositiveButton("Yes", (s, a) =>
-            //        {
-            //            //if (scoreData.DoelpuntVoorTegen == "Voor") kansen.Kans--;
-            //            if (scoreData.DoelpuntVoorTegen == "Voor")  
-            //            if (scoreData.DoelpuntVoorTegen == "Voor")
-            //                    // Remove the corresponding entry from the list
-            //                    scoreDataList.RemoveAt(position);S
-
-            //            // Notify the adapter that the data set has changed
-            //            NotifyDataSetChanged();
-            //        })
-            //        .SetNegativeButton("No", (s, a) => { })
-            //        .Create();
-
-            //    confirmDialog.Show();
-            //};
 
             return view;
         }

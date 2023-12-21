@@ -1,5 +1,4 @@
-﻿// ScoreDataAdapter.cs
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Android.App;
 using Android.Views;
 using Android.Widget;
@@ -26,10 +25,8 @@ public class ScoreDataAdapter : BaseAdapter<ScoreDataManager>
     {
         var view = convertView ?? context.LayoutInflater.Inflate(Resource.Layout.score_item_layout, null);
 
-        // Customize the layout for each item in the list
         var scoreData = scoreDataList[position];
 
-        // Find and set values to your TextViews in the item layout
         var textViewScore = view.FindViewById<TextView>(Resource.Id.textViewScore);
         textViewScore.Text = $"Score: {scoreData.Score}";
 

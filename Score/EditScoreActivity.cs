@@ -1,14 +1,10 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Score
 {
@@ -31,16 +27,27 @@ namespace Score
             scoreList = JsonConvert.DeserializeObject<List<ScoreDataManager>>(
                 Intent.GetStringExtra("SenderScoreList"));
 
-            // Set up the adapter for the ListView
             var adapter = new ScoreDataAdapter(this, scoreList);
             scoreListView.Adapter = adapter;
 
             deleteButton.Click += (sender, e) =>
             {
-                // Check if an item is selected
                 if (scoreListView.CheckedItemPosition != AdapterView.InvalidPosition)
                 {
-                    Toast.MakeText(this, "Score verwjderd", ToastLength.Short).Show();
+                    var huidigeEntry = scoreList.ElementAt(scoreListView.CheckedItemPosition);
+
+                    scoreList.RemoveAll(x => x.Score == huidigeEntry.Score);
+
+                    adapter.NotifyDataSetChanged();
+
+                    Toast.MakeText(this, "Item deleted", ToastLength.Short).Show();
+
+                    var updatedListAsJson = JsonConvert.SerializeObject(scoreList);
+                    Intent returnIntent = new Intent();
+                    returnIntent.PutExtra("UpdatedScoreList", updatedListAsJson);
+                    returnIntent.PutExtra("DeletedEntry", JsonConvert.SerializeObject(huidigeEntry));
+                    SetResult(Result.Ok, returnIntent);
+                    Finish(); 
                 }
             };
         }

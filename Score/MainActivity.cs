@@ -22,6 +22,7 @@ namespace Score
     [Activity(Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity, View.IOnTouchListener
     {
+        const int EditScoreRequestCode = 3;
         //ScoreData
         private ScoreDataManager scoreDataManager;
         private List<ScoreDataManager> scoreList = new List<ScoreDataManager>();
@@ -85,13 +86,9 @@ namespace Score
                             var listAsJson = JsonConvert.SerializeObject(scoreList);
                             Intent senderIntent = new Intent(this, typeof(EditScoreActivity));
                             senderIntent.PutExtra("SenderScoreList", listAsJson);
-                            StartActivity(senderIntent);
+                            StartActivityForResult(senderIntent, EditScoreRequestCode);
                             break;
                     }
-                };
-
-                menu.DismissEvent += (s2, arg2) => {
-                    Console.WriteLine("menu dismissed");
                 };
                 menu.Show();
             };
@@ -111,7 +108,6 @@ namespace Score
                 ShowKansen(lijstKansen);
             };
 
-            // Load player names from SharedPreferences
             var sharedPreferences = GetSharedPreferences("PlayerSettings", FileCreationMode.Private);
             var jsonPlayerNames = sharedPreferences.GetString("PlayerNames", string.Empty);
             playerNames = JsonConvert.DeserializeObject<List<string>>(jsonPlayerNames) ?? new List<string>();
@@ -126,10 +122,8 @@ namespace Score
             pauseButton = FindViewById<Button>(Resource.Id.pauseButton);
             resetButton = FindViewById<Button>(Resource.Id.resetButton);
 
-            // Initialize the StopwatchManager
             stopwatchManager = new StopwatchManager();
 
-            // Stopwatch click event handlers
             startButton.Click += (sender, e) =>
             {
                 stopwatchManager.Start();
@@ -154,74 +148,57 @@ namespace Score
         {
             while (true)
             {
-                // Update the UI with the current elapsed time
                 RunOnUiThread(() =>
                 {
                     timeTextView.Text = stopwatchManager.ElapsedTime.ToString(@"mm\:ss");
                 });
 
-                // Delay for 10 milliseconds before updating the time again
                 await Task.Delay(10);
             }
         }
 
         private void ShowKansen(View anchorView)
         {
-            // Group the kansen data by Wie
             var groupedKansenData = kansenList.GroupBy(k => k.Wie).ToList();
 
-            // Inflate the layout for the popup
             var inflater = (LayoutInflater)GetSystemService(LayoutInflaterService);
             var popupView = inflater.Inflate(Resource.Layout.PopupLayout, null);
 
-            // Find the ListView in the popup layout
             var listView = popupView.FindViewById<ListView>(Resource.Id.listView);
 
-            // Create an adapter for your grouped score data
             groupedKansenData = groupedKansenData.Where(item => item.Key != null).ToList();
             var adapter = new KansenDataAdapter(this, groupedKansenData, scoreList);
 
-            // Set the adapter for the ListView
             listView.Adapter = adapter;
 
-            // Create the popup window
             var popup = new PopupWindow(popupView, ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, true);
 
-            // Set the location of the popup relative to the anchor view
             popup.ShowAsDropDown(anchorView);
 
-            // Set a dismiss event handler for the popup
             popup.DismissEvent += (sender, e) =>
             {
-                // Handle dismiss event if needed
+                // Nog niet nodig gehad.
             };
         }
 
         private void ShowScores(View anchorView)
         {
-            // Inflate the layout for the popup
             var inflater = (LayoutInflater)GetSystemService(LayoutInflaterService);
             var popupView = inflater.Inflate(Resource.Layout.PopupLayout, null);
 
-            // Find the ListView in the popup layout
             var listView = popupView.FindViewById<ListView>(Resource.Id.listView);
 
-            // Create an adapter for your score data
             var adapter = new ScoreDataAdapter(this, scoreList);
 
-            // Set the adapter for the ListView
             listView.Adapter = adapter;
 
-            // Create the popup window
             var popup = new PopupWindow(popupView, ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, true);
 
-            // Set the location of the popup relative to the anchor view
             popup.ShowAsDropDown(anchorView);
             
-            // Set a dismiss event handler for the popup
             popup.DismissEvent += (sender, e) =>
             {
-                // Handle dismiss event if needed
+                // Laten staan, misschien iets mee doen
             };
         }
 
@@ -246,14 +223,13 @@ namespace Score
             var spinnerAdapter3 = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData3);
             spinner3.Adapter = spinnerAdapter3;
 
-            string selectedSpinnerItem3 = null; // Define a variable to store the selection
+            string selectedSpinnerItem3 = null; 
 
             spinner3.ItemSelected += (sender, e) =>
             {
-                selectedSpinnerItem3 = spinnerData3[e.Position]; // Store the selected item
+                selectedSpinnerItem3 = spinnerData3[e.Position]; 
             };
 
-            // Add a button to dismiss the dialog
             dialogBuilder.SetPositiveButton("OK", (sender, args) =>
             {
                 kansen.Kans++;
@@ -266,13 +242,11 @@ namespace Score
                 kans.Doelpunt = false;
                 kansenList.Add(kans);
             });
-            // Add a button to dismiss the dialog
             dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
             {
                 Toast.MakeText(this, "Kans geannuleerd!", ToastLength.Short).Show();
             });
 
-            // Create and show the dialog
             AlertDialog dialog = dialogBuilder.Create();
             dialog.Show();
         }
@@ -290,7 +264,6 @@ namespace Score
             kansenIntent.SetType("text/csv");
             kansenIntent.PutExtra(Intent.ExtraTitle, kansenFileName);
 
-            // Start activity for Kansen file
             StartActivityForResult(kansenIntent, 2);
         }
 
@@ -309,17 +282,14 @@ namespace Score
 
                 string path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "Download");
 
-                // File paths for ScoreDataManager and Kansen
                 string scoreFileName = $"{dateTimeNow}-{guid}-score.csv";
                 string scoreFilePath = Path.Combine(path, scoreFileName);
 
-                // Create an intent for ScoreDataManager file
                 Intent scoreIntent = new Intent(Intent.ActionCreateDocument);
                 scoreIntent.AddCategory(Intent.CategoryOpenable);
                 scoreIntent.SetType("text/csv");
                 scoreIntent.PutExtra(Intent.ExtraTitle, scoreFileName);
 
-                // Start activity for ScoreDataManager file
                 StartActivityForResult(scoreIntent, 1);
             });
 
@@ -376,6 +346,25 @@ namespace Score
                             }
                         }
                         break;
+                    case 3: // Result from EditScoreActivity
+                        if (data.HasExtra("UpdatedScoreList"))
+                        {
+                            var updatedListAsJson = data.GetStringExtra("UpdatedScoreList");
+                            scoreList = JsonConvert.DeserializeObject<List<ScoreDataManager>>(updatedListAsJson);
+
+                            var deletedEntryJson = data.GetStringExtra("DeletedEntry");
+                            var deletedEntry = JsonConvert.DeserializeObject<ScoreDataManager>(deletedEntryJson);
+
+                            if(deletedEntry.DoelpuntVoorTegen == "Voor")
+                            {
+                                ThuisPlus("min");
+                            }
+                            if(deletedEntry.DoelpuntVoorTegen == "Tegen")
+                            {
+                                UitPlus("min");
+                            }
+                        }
+                        break;
                 }
             }
             else
@@ -392,15 +381,12 @@ namespace Score
             DisplayMetrics displayMetrics = new DisplayMetrics();
             WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
 
-            // Calculate the midpoint of the screen
             int screenWidth = displayMetrics.WidthPixels;
             int screenHeight = displayMetrics.HeightPixels;
 
             switch (e.Action)
             {
                 case MotionEventActions.Down:
-                    // Touch started
-                    // Handle the touch down event
                     ScoreDataManager scoreData = new ScoreDataManager();
                     scoreData.DoelpuntVoorTegen = scoreDataManager.CheckDoelpuntVoorOfTegen(x, screenWidth);
                     scoreData.PlaatsDoelpunt =
@@ -439,20 +425,19 @@ namespace Score
             var spinnerAdapter2 = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, spinnerData2);
             spinner2.Adapter = spinnerAdapter2;
 
-            string selectedSpinnerItem = null; // Define a variable to store the selection
-            string selectedSpinnerItem2 = null; // Define a variable to store the selection
+            string selectedSpinnerItem = null; 
+            string selectedSpinnerItem2 = null; 
 
             spinner.ItemSelected += (sender, e) =>
             {
-                selectedSpinnerItem = spinnerData[e.Position]; // Store the selected item
+                selectedSpinnerItem = spinnerData[e.Position]; 
             };
             spinner2.ItemSelected += (sender, e) =>
             {
-                selectedSpinnerItem2 = spinnerData2[e.Position]; // Store the selected item
+                selectedSpinnerItem2 = spinnerData2[e.Position]; 
             };
 
             var kansUitScore = new Kansen();
-            // Add a button to dismiss the dialog
             dialogBuilder.SetPositiveButton("OK", (sender, args) =>
             {
                 if (scoreData.DoelpuntVoorTegen == "Voor") ThuisPlus("plus");
@@ -480,13 +465,11 @@ namespace Score
                 scoreList.Add(scoreData);
                 kansenList.Add(kansUitScore);
             });
-            // Add a button to dismiss the dialog
             dialogBuilder.SetNegativeButton("Cancel", (sender, args) =>
             {
                 Toast.MakeText(this, "Score geannuleerd!", ToastLength.Short).Show();
             });
 
-            // Create and show the dialog
             AlertDialog dialog = dialogBuilder.Create();
             dialog.Show();
         }

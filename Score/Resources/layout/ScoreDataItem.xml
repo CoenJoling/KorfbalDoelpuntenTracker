@@ -16,14 +16,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" />
-    <!--
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete" />
-
-    S
-    Add more TextViews for other properties in ScoreDataManager -->
 
 </LinearLayout>
